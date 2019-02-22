@@ -38,8 +38,8 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);		
-		Page<User> page=   (Page<User>) userMapper.selectByExample(null);
+		PageHelper.startPage(pageNum, pageSize);
+		Page<User> page=   (Page<User>) userMapper.selectByExample(new UserExample());
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
 			}
 	
 		}
-		
+
 		Page<User> page= (Page<User>)userMapper.selectByExample(example);
 		return new PageResult(page.getTotal(), page.getResult());
 	}

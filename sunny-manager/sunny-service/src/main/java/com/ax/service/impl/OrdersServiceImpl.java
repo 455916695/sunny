@@ -37,7 +37,7 @@ public class OrdersServiceImpl implements OrdersService {
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);		
-		Page<Orders> page=   (Page<Orders>) ordersMapper.selectByExample(null);
+		Page<Orders> page=   (Page<Orders>) ordersMapper.selectByExample(new OrdersExample());
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 

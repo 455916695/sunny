@@ -38,7 +38,7 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);		
-		Page<Cart> page=   (Page<Cart>) cartMapper.selectByExample(null);
+		Page<Cart> page=   (Page<Cart>) cartMapper.selectByExample(new CartExample());
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 

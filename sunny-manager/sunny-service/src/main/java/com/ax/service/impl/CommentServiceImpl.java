@@ -37,7 +37,7 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);		
-		Page<GoodsComment> page=   (Page<GoodsComment>) commentMapper.selectByExample(null);
+		Page<GoodsComment> page=   (Page<GoodsComment>) commentMapper.selectByExample(new GoodsCommentExample());
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 

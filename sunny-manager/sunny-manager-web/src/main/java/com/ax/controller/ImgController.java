@@ -86,6 +86,7 @@ public class ImgController {
 	 * @return
 	 */
 	@RequestMapping("/findAll")
+	@ResponseBody
 	public List<GoodsImg> findAll(){
 		return imgService.findAll();
 	}
@@ -96,6 +97,7 @@ public class ImgController {
 	 * @return
 	 */
 	@RequestMapping("/findPage")
+	@ResponseBody
 	public PageResult findPage(int page, int rows){
 		return imgService.findPage(page, rows);
 	}
@@ -106,7 +108,8 @@ public class ImgController {
 	 * @return
 	 */
 	@RequestMapping("/add")
-	public Result add(@RequestBody GoodsImg img){
+	@ResponseBody
+	public Result add(@RequestBody GoodsImg img){ //注意，使用@RequestBody 出现400 的与原因是因为注入对象中存在date或者int,而前台传递的Strig类型所以报错
 		try {
 			imgService.add(img);
 			return new Result(true, "增加成功");
@@ -122,6 +125,7 @@ public class ImgController {
 	 * @return
 	 */
 	@RequestMapping("/update")
+	@ResponseBody
 	public Result update(@RequestBody GoodsImg img){
 		try {
 			imgService.update(img);
@@ -138,6 +142,7 @@ public class ImgController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
+	@ResponseBody
 	public GoodsImg findOne(String id){
 		return imgService.findOne(id);		
 	}
@@ -148,6 +153,7 @@ public class ImgController {
 	 * @return
 	 */
 	@RequestMapping("/delete")
+	@ResponseBody
 	public Result delete(String [] ids){
 		try {
 			imgService.delete(ids);
@@ -166,6 +172,7 @@ public class ImgController {
 	 * @return
 	 */
 	@RequestMapping("/search")
+	@ResponseBody
 	public PageResult search(@RequestBody GoodsImg img, int page, int rows  ){
 		return imgService.findPage(img, page, rows);		
 	}

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * controller
@@ -27,6 +28,7 @@ public class OrdersController {
 	 * @return
 	 */
 	@RequestMapping("/findAll")
+	@ResponseBody
 	public List<Orders> findAll(){
 		return ordersService.findAll();
 	}
@@ -37,6 +39,7 @@ public class OrdersController {
 	 * @return
 	 */
 	@RequestMapping("/findPage")
+	@ResponseBody
 	public PageResult findPage(int page, int rows){
 		return ordersService.findPage(page, rows);
 	}
@@ -47,6 +50,7 @@ public class OrdersController {
 	 * @return
 	 */
 	@RequestMapping("/add")
+	@ResponseBody
 	public Result add(@RequestBody Orders orders){
 		try {
 			ordersService.add(orders);
@@ -63,6 +67,7 @@ public class OrdersController {
 	 * @return
 	 */
 	@RequestMapping("/update")
+	@ResponseBody
 	public Result update(@RequestBody Orders orders){
 		try {
 			ordersService.update(orders);
@@ -79,6 +84,7 @@ public class OrdersController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
+	@ResponseBody
 	public Orders findOne(String id){
 		return ordersService.findOne(id);		
 	}
@@ -89,6 +95,7 @@ public class OrdersController {
 	 * @return
 	 */
 	@RequestMapping("/delete")
+	@ResponseBody
 	public Result delete(String [] ids){
 		try {
 			ordersService.delete(ids);
@@ -107,6 +114,7 @@ public class OrdersController {
 	 * @return
 	 */
 	@RequestMapping("/search")
+	@ResponseBody
 	public PageResult search(@RequestBody Orders orders, int page, int rows  ){
 		return ordersService.findPage(orders, page, rows);		
 	}

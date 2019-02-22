@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * controller
@@ -27,6 +28,7 @@ public class CartController {
 	 * @return
 	 */
 	@RequestMapping("/findAll")
+	@ResponseBody
 	public List<Cart> findAll(){
 		return cartService.findAll();
 	}
@@ -37,6 +39,7 @@ public class CartController {
 	 * @return
 	 */
 	@RequestMapping("/findPage")
+	@ResponseBody
 	public PageResult findPage(int page, int rows){
 		return cartService.findPage(page, rows);
 	}
@@ -47,6 +50,7 @@ public class CartController {
 	 * @return
 	 */
 	@RequestMapping("/add")
+	@ResponseBody
 	public Result add(@RequestBody Cart cart){
 		try {
 			cartService.add(cart);
@@ -63,6 +67,7 @@ public class CartController {
 	 * @return
 	 */
 	@RequestMapping("/update")
+	@ResponseBody
 	public Result update(@RequestBody Cart cart){
 		try {
 			cartService.update(cart);
@@ -79,6 +84,7 @@ public class CartController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
+	@ResponseBody
 	public Cart findOne(String id){
 		return cartService.findOne(id);		
 	}
@@ -89,6 +95,7 @@ public class CartController {
 	 * @return
 	 */
 	@RequestMapping("/delete")
+	@ResponseBody
 	public Result delete(String [] ids){
 		try {
 			cartService.delete(ids);
@@ -107,6 +114,7 @@ public class CartController {
 	 * @return
 	 */
 	@RequestMapping("/search")
+	@ResponseBody
 	public PageResult search(@RequestBody Cart cart, int page, int rows  ){
 		return cartService.findPage(cart, page, rows);		
 	}

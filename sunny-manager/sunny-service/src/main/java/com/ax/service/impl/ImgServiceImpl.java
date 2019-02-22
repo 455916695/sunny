@@ -38,7 +38,7 @@ public class ImgServiceImpl implements ImgService {
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);		
-		Page<GoodsImg> page=   (Page<GoodsImg>) imgMapper.selectByExample(null);
+		Page<GoodsImg> page=   (Page<GoodsImg>) imgMapper.selectByExample(new GoodsImgExample());
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 

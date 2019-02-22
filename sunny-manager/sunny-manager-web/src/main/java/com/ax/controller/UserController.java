@@ -115,7 +115,7 @@ public class UserController {
 	 */
 	@RequestMapping("/search")
 	@ResponseBody
-	public PageResult search(@RequestBody User user, int page, int rows  ){
+	public PageResult search( User user, int page, int rows  ){
 		return userService.findPage(user, page, rows);		
 	}
 	

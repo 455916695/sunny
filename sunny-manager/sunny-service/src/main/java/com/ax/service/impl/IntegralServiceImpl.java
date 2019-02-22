@@ -38,7 +38,7 @@ public class IntegralServiceImpl implements IntegralService {
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);		
-		Page<Integral> page=   (Page<Integral>) integralMapper.selectByExample(null);
+		Page<Integral> page=   (Page<Integral>) integralMapper.selectByExample(new IntegralExample());
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 

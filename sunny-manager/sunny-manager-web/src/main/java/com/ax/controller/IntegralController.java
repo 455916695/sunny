@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 /**
@@ -28,6 +29,7 @@ public class IntegralController {
 	 * @return
 	 */
 	@RequestMapping("/findAll")
+	@ResponseBody
 	public List<Integral> findAll(){
 		return integralService.findAll();
 	}
@@ -38,6 +40,7 @@ public class IntegralController {
 	 * @return
 	 */
 	@RequestMapping("/findPage")
+	@ResponseBody
 	public PageResult findPage(int page, int rows){
 		return integralService.findPage(page, rows);
 	}
@@ -48,6 +51,7 @@ public class IntegralController {
 	 * @return
 	 */
 	@RequestMapping("/add")
+	@ResponseBody
 	public Result add(@RequestBody Integral integral){
 		try {
 			integralService.add(integral);
@@ -64,6 +68,7 @@ public class IntegralController {
 	 * @return
 	 */
 	@RequestMapping("/update")
+	@ResponseBody
 	public Result update(@RequestBody Integral integral){
 		try {
 			integralService.update(integral);
@@ -80,6 +85,7 @@ public class IntegralController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
+	@ResponseBody
 	public Integral findOne(String id){
 		return integralService.findOne(id);		
 	}
@@ -90,6 +96,7 @@ public class IntegralController {
 	 * @return
 	 */
 	@RequestMapping("/delete")
+	@ResponseBody
 	public Result delete(String [] ids){
 		try {
 			integralService.delete(ids);
@@ -108,6 +115,7 @@ public class IntegralController {
 	 * @return
 	 */
 	@RequestMapping("/search")
+	@ResponseBody
 	public PageResult search(@RequestBody Integral integral, int page, int rows  ){
 		return integralService.findPage(integral, page, rows);		
 	}

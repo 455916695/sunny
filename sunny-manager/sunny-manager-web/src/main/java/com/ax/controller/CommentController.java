@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 /**
@@ -28,6 +29,7 @@ public class CommentController {
 	 * @return
 	 */
 	@RequestMapping("/findAll")
+	@ResponseBody
 	public List<GoodsComment> findAll(){
 		return commentService.findAll();
 	}
@@ -38,6 +40,7 @@ public class CommentController {
 	 * @return
 	 */
 	@RequestMapping("/findPage")
+	@ResponseBody
 	public PageResult findPage(int page, int rows){
 		return commentService.findPage(page, rows);
 	}
@@ -48,6 +51,7 @@ public class CommentController {
 	 * @return
 	 */
 	@RequestMapping("/add")
+	@ResponseBody
 	public Result add(@RequestBody GoodsComment comment){
 		try {
 			commentService.add(comment);
@@ -64,6 +68,7 @@ public class CommentController {
 	 * @return
 	 */
 	@RequestMapping("/update")
+	@ResponseBody
 	public Result update(@RequestBody GoodsComment comment){
 		try {
 			commentService.update(comment);
@@ -80,6 +85,7 @@ public class CommentController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
+	@ResponseBody
 	public GoodsComment findOne(String id){
 		return commentService.findOne(id);		
 	}
@@ -90,6 +96,7 @@ public class CommentController {
 	 * @return
 	 */
 	@RequestMapping("/delete")
+	@ResponseBody
 	public Result delete(String [] ids){
 		try {
 			commentService.delete(ids);
@@ -108,6 +115,7 @@ public class CommentController {
 	 * @return
 	 */
 	@RequestMapping("/search")
+	@ResponseBody
 	public PageResult search(@RequestBody GoodsComment comment, int page, int rows  ){
 		return commentService.findPage(comment, page, rows);		
 	}

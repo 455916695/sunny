@@ -38,7 +38,7 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);		
-		Page<Goods> page=   (Page<Goods>) goodsMapper.selectByExample(null);
+		Page<Goods> page=   (Page<Goods>) goodsMapper.selectByExample(new GoodsExample());
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 

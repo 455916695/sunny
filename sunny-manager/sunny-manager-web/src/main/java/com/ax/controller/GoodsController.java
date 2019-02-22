@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 /**
@@ -38,6 +39,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/findPage")
+	@ResponseBody
 	public PageResult findPage(int page, int rows){
 		return goodsService.findPage(page, rows);
 	}
@@ -48,6 +50,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/add")
+	@ResponseBody
 	public Result add(@RequestBody Goods goods){
 		try {
 			goodsService.add(goods);
@@ -64,6 +67,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/update")
+	@ResponseBody
 	public Result update(@RequestBody Goods goods){
 		try {
 			goodsService.update(goods);
@@ -80,6 +84,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
+	@ResponseBody
 	public Goods findOne(String id){
 		return goodsService.findOne(id);		
 	}
@@ -90,6 +95,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/delete")
+	@ResponseBody
 	public Result delete(String [] ids){
 		try {
 			goodsService.delete(ids);
@@ -108,6 +114,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/search")
+	@ResponseBody
 	public PageResult search(@RequestBody Goods goods, int page, int rows  ){
 		return goodsService.findPage(goods, page, rows);		
 	}
