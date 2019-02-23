@@ -22,7 +22,25 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
+
+
+	//TODO 测试拦截功能
+	/**
+	 *  登录
+	 * */
+	@RequestMapping("/login")
+	@ResponseBody
+	public Result login(User user) {
+		return new Result(true,"登录成功");
+	}
+	@RequestMapping("/register")
+	@ResponseBody
+	public Result register(User user) {
+		return new Result(true,"注册成功");
+	}
+
+
+
 	/**
 	 * 返回全部列表
 	 * @return
