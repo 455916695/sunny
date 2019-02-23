@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 
 /**
- * 登录拦截器，编写完此类，还需要在相应的配置文件中，进行配置
+ * 登录拦截器，编写完此类，还需要在springmvc.xml文件中，进行配置
  */
 public class LoginInterceptor implements HandlerInterceptor {
 

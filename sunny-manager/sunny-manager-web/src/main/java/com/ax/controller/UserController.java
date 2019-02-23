@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 /**
  * controller
  * @author Administrator
@@ -30,9 +33,20 @@ public class UserController {
 	 * */
 	@RequestMapping("/login")
 	@ResponseBody
-	public Result login(User user) {
-		return new Result(true,"登录成功");
+	public Result login(User user, HttpServletRequest request) {
+		Result result = new Result(false,"非法参数");
+		if(user != null) {
+			result = userService.login(user);
+			if(result.isFlag()) {
+				HttpSession session = request.getSession();
+				session.setAttribute("user",result.getData());
+				user = (User) result.getData();
+				user.setPassword("");
+			}
+		}
+		return result;
 	}
+
 	@RequestMapping("/register")
 	@ResponseBody
 	public Result register(User user) {

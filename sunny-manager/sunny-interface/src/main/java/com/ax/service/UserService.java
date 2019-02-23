@@ -1,5 +1,6 @@
 package com.ax.service;
 import com.ax.entity.PageResult;
+import com.ax.entity.Result;
 import com.ax.pojo.User;
 
 import java.util.List;
@@ -58,5 +59,10 @@ public interface UserService {
 	 * @return
 	 */
 	public PageResult findPage(User user, int pageNum, int pageSize);
-	
+
+	/**
+	 * @Param user 用户
+	 * @return
+	 * */
+    Result login(User user);
 }
