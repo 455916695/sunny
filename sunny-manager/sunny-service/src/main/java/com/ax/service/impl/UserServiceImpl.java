@@ -2,6 +2,7 @@ package com.ax.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.ax.entity.PageResult;
 import com.ax.entity.Result;
@@ -9,6 +10,7 @@ import com.ax.mapper.UserMapper;
 import com.ax.pojo.User;
 import com.ax.pojo.UserExample;
 import com.ax.service.UserService;
+import com.ax.util.MD5Utils;
 import com.github.pagehelper.Page;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,7 +136,7 @@ public class UserServiceImpl implements UserService {
             List<User> users = userMapper.selectByExample(userExample);
             if (users != null && users.size() > 0) {
                 User selectUser = users.get(0);
-                if (selectUser.getPassword().equals(user.getPassword())) { //密码是否需要进行加密
+                if (selectUser.getPassword().equals(MD5Utils.md5(user.getPassword()))) { //密码是否需要进行加密
                     result = new Result(true, "登录成功", selectUser);
                 } else {
                     result = new Result(false, "密码错误");
@@ -145,6 +147,39 @@ public class UserServiceImpl implements UserService {
             //判断密码是否正确（加密）
         } else {
             result = new Result(false, "非法参数");
+        }
+        return result;
+    }
+
+    @Override
+    public Result register(User user) {
+        Result result = null;
+        //校验user是否为null
+        if(user != null) {
+            //校验用户名密码是否存在
+            if(!StringUtils.isEmpty(user.getName()) && !StringUtils.isEmpty(user.getPassword())) {
+                //检验用户名是否已经存在
+                UserExample userExample = new UserExample();
+                UserExample.Criteria criteria = userExample.createCriteria();
+                criteria.andNameEqualTo(user.getName());
+                List<User> users = userMapper.selectByExample(userExample);
+                if(users == null || users.size() < 1) {
+                    //添加id
+                    user.setUuid(UUID.randomUUID().toString());
+                    //修改密码
+                    user.setPassword(MD5Utils.md5(user.getPassword()));
+
+                    userMapper.insert(user);
+
+                    result = new Result(true,"注册成功",user);
+                }else {
+                    result = new Result(false,"用户名已存在");
+                }
+            }else {
+                result = new Result(false,"用户名或密码为null");
+            }
+        }else {
+            result = new Result(false,"参数不能为null");
         }
         return result;
     }

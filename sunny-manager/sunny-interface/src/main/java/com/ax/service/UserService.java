@@ -61,8 +61,16 @@ public interface UserService {
 	public PageResult findPage(User user, int pageNum, int pageSize);
 
 	/**
+	 * 登陆
 	 * @Param user 用户
 	 * @return
 	 * */
     Result login(User user);
+
+    /**
+	 *注册
+	 * @Param user 用户
+	 * @return
+	 * */
+	Result register(User user);
 }

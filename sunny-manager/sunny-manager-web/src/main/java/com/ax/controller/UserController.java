@@ -50,7 +50,11 @@ public class UserController {
 	@RequestMapping("/register")
 	@ResponseBody
 	public Result register(User user) {
-		return new Result(true,"注册成功");
+		Result result = new Result(false,"非法参数");
+		if(user != null){
+			result = userService.register(user);
+		}
+		return result;
 	}
 
 
