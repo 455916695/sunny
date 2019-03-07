@@ -2,7 +2,7 @@ package com.ax.service;
 import java.util.List;
 
 import com.ax.entity.PageResult;
-import com.ax.pojo.Goods;
+import com.ax.pojo.TbGoods;
 
 /**
  * 服务层接口
@@ -15,7 +15,7 @@ public interface GoodsService {
 	 * 返回全部列表
 	 * @return
 	 */
-	public List<Goods> findAll();
+	public List<TbGoods> findAll();
 	
 	
 	/**
@@ -28,13 +28,13 @@ public interface GoodsService {
 	/**
 	 * 增加
 	*/
-	public void add(Goods goods);
+	public void add(TbGoods goods);
 	
 	
 	/**
 	 * 修改
 	 */
-	public void update(Goods goods);
+	public void update(TbGoods goods);
 	
 
 	/**
@@ -42,14 +42,14 @@ public interface GoodsService {
 	 * @param id
 	 * @return
 	 */
-	public Goods findOne(String id);
+	public TbGoods findOne(Long id);
 	
 	
 	/**
 	 * 批量删除
 	 * @param ids
 	 */
-	public void delete(String[] ids);
+	public void delete(Long[] ids);
 
 	/**
 	 * 分页
@@ -57,6 +57,6 @@ public interface GoodsService {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	public PageResult findPage(Goods goods, int pageNum, int pageSize);
+	public PageResult findPage(TbGoods goods, int pageNum, int pageSize);
 	
 }

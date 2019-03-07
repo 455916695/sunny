@@ -1,8 +1,8 @@
 package com.ax.service;
-import com.ax.entity.PageResult;
-import com.ax.pojo.Cart;
-
 import java.util.List;
+
+import com.ax.entity.PageResult;
+import com.ax.pojo.TbCart;
 
 /**
  * 服务层接口
@@ -15,7 +15,7 @@ public interface CartService {
 	 * 返回全部列表
 	 * @return
 	 */
-	public List<Cart> findAll();
+	public List<TbCart> findAll();
 	
 	
 	/**
@@ -28,13 +28,13 @@ public interface CartService {
 	/**
 	 * 增加
 	*/
-	public void add(Cart cart);
+	public void add(TbCart cart);
 	
 	
 	/**
 	 * 修改
 	 */
-	public void update(Cart cart);
+	public void update(TbCart cart);
 	
 
 	/**
@@ -42,14 +42,14 @@ public interface CartService {
 	 * @param id
 	 * @return
 	 */
-	public Cart findOne(String id);
+	public TbCart findOne(Long id);
 	
 	
 	/**
 	 * 批量删除
 	 * @param ids
 	 */
-	public void delete(String[] ids);
+	public void delete(Long[] ids);
 
 	/**
 	 * 分页
@@ -57,6 +57,6 @@ public interface CartService {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	public PageResult findPage(Cart cart, int pageNum, int pageSize);
+	public PageResult findPage(TbCart cart, int pageNum, int pageSize);
 	
 }

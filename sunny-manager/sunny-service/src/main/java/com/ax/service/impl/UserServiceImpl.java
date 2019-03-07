@@ -1,22 +1,22 @@
 package com.ax.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import com.ax.entity.PageResult;
 import com.ax.entity.Result;
-import com.ax.mapper.UserMapper;
-import com.ax.pojo.User;
-import com.ax.pojo.UserExample;
+import com.ax.mapper.TbUserMapper;
+import com.ax.pojo.TbUser;
+import com.ax.pojo.TbUserExample;
 import com.ax.service.UserService;
+import com.ax.util.IdWorker;
 import com.ax.util.MD5Utils;
 import com.github.pagehelper.Page;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 
 /**
  * 服务实现层
@@ -27,14 +27,68 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserMapper userMapper;
+    private TbUserMapper userMapper;
 
     /**
      * 查询全部
      */
     @Override
-    public List<User> findAll() {
+    public List<TbUser> findAll() {
         return userMapper.selectByExample(null);
+    }
+
+
+    //	 TODO  未完成登录书写，测试登录功能，还需要修改一部分内容
+    @Override
+    public Result login(TbUser user) {
+        Result result = null;
+        //判断用户名是否为null
+        if (user == null || StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
+            result = new Result(false, "登陆失败:用户信息异常");
+        } else {
+            //判断用户是否存在
+            TbUserExample tue = new TbUserExample();
+            TbUserExample.Criteria criteria = tue.createCriteria();
+            criteria.andUsernameEqualTo(user.getUsername());
+            List<TbUser> tbUsers = userMapper.selectByExample(tue);
+            if (tbUsers == null || tbUsers.size() < 1) {
+                result = new Result(false, "登陆失败:指定用户不存在");
+            } else {
+                //判断密码是否正确
+                if (MD5Utils.md5(user.getPassword()).equals(tbUsers.get(0).getPassword())) {
+                    result = new Result(true, "登陆成功", tbUsers.get(0));
+                } else {
+                    result = new Result(false, "登陆失败:密码不正确");
+                }
+            }
+        }
+        return result;
+    }
+
+
+    @Override
+    public Result register(TbUser user) {
+        Result result = null;
+        //判断用户参数
+        if (user == null || StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
+            //参数为空
+            result = new Result(false, "注册失败:用户信息异常");
+        } else {
+            //校验用户是否已近存在
+            TbUserExample tbe = new TbUserExample();
+            TbUserExample.Criteria criteria = tbe.createCriteria();
+            criteria.andUsernameEqualTo(user.getUsername());
+            List<TbUser> tbUsers = userMapper.selectByExample(tbe);  //TODO 这里
+            if (tbUsers != null && tbUsers.size() > 0) {
+                result = new Result(false, "注册失败:用户已存在");
+            } else {
+                user.setId(new IdWorker().nextId());
+                user.setPassword(MD5Utils.md5(user.getPassword()));
+                userMapper.insert(user);
+                result = new Result(true, "注册成功");
+            }
+        }
+        return result;
     }
 
 
@@ -44,7 +98,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageResult findPage(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        Page<User> page = (Page<User>) userMapper.selectByExample(new UserExample());
+        Page<TbUser> page = (Page<TbUser>) userMapper.selectByExample(null);
         return new PageResult(page.getTotal(), page.getResult());
     }
 
@@ -52,7 +106,7 @@ public class UserServiceImpl implements UserService {
      * 增加
      */
     @Override
-    public void add(User user) {
+    public void add(TbUser user) {
         userMapper.insert(user);
     }
 
@@ -61,7 +115,7 @@ public class UserServiceImpl implements UserService {
      * 修改
      */
     @Override
-    public void update(User user) {
+    public void update(TbUser user) {
         userMapper.updateByPrimaryKey(user);
     }
 
@@ -72,7 +126,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public User findOne(String id) {
+    public TbUser findOne(Long id) {
         return userMapper.selectByPrimaryKey(id);
     }
 
@@ -80,24 +134,21 @@ public class UserServiceImpl implements UserService {
      * 批量删除
      */
     @Override
-    public void delete(String[] ids) {
-        for (String id : ids) {
+    public void delete(Long[] ids) {
+        for (Long id : ids) {
             userMapper.deleteByPrimaryKey(id);
         }
     }
 
 
     @Override
-    public PageResult findPage(User user, int pageNum, int pageSize) {
+    public PageResult findPage(TbUser user, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
 
-        UserExample example = new UserExample();
-        UserExample.Criteria criteria = example.createCriteria();
+        TbUserExample example = new TbUserExample();
+        TbUserExample.Criteria criteria = example.createCriteria();
 
         if (user != null) {
-            if (user.getUuid() != null && user.getUuid().length() > 0) {
-                criteria.andUuidLike("%" + user.getUuid() + "%");
-            }
             if (user.getName() != null && user.getName().length() > 0) {
                 criteria.andNameLike("%" + user.getName() + "%");
             }
@@ -119,69 +170,7 @@ public class UserServiceImpl implements UserService {
 
         }
 
-        Page<User> page = (Page<User>) userMapper.selectByExample(example);
+        Page<TbUser> page = (Page<TbUser>) userMapper.selectByExample(example);
         return new PageResult(page.getTotal(), page.getResult());
     }
-
-    //	 TODO  未完成登录书写，测试登录功能，还需要修改一部分内容
-    @Override
-    public Result login(User user) {
-        Result result = null;
-        //判断用户名是否为null
-        if (!StringUtils.isEmpty(user.getName())) {
-            //判断用户是否存在
-            UserExample userExample = new UserExample();
-            UserExample.Criteria criteria = userExample.createCriteria();
-            criteria.andNameEqualTo(user.getName());
-            List<User> users = userMapper.selectByExample(userExample);
-            if (users != null && users.size() > 0) {
-                User selectUser = users.get(0);
-                if (selectUser.getPassword().equals(MD5Utils.md5(user.getPassword()))) { //密码是否需要进行加密
-                    result = new Result(true, "登录成功", selectUser);
-                } else {
-                    result = new Result(false, "密码错误");
-                }
-            } else {
-                result = new Result(false, "指定用户不存在");
-            }
-            //判断密码是否正确（加密）
-        } else {
-            result = new Result(false, "非法参数");
-        }
-        return result;
-    }
-
-    @Override
-    public Result register(User user) {
-        Result result = null;
-        //校验user是否为null
-        if(user != null) {
-            //校验用户名密码是否存在
-            if(!StringUtils.isEmpty(user.getName()) && !StringUtils.isEmpty(user.getPassword())) {
-                //检验用户名是否已经存在
-                UserExample userExample = new UserExample();
-                UserExample.Criteria criteria = userExample.createCriteria();
-                criteria.andNameEqualTo(user.getName());
-                List<User> users = userMapper.selectByExample(userExample);
-                if(users == null || users.size() < 1) {
-                    //添加id
-                    user.setUuid(UUID.randomUUID().toString());
-                    //修改密码
-                    user.setPassword(MD5Utils.md5(user.getPassword()));
-
-                    userMapper.insert(user);
-
-                    result = new Result(true,"注册成功",user);
-                }else {
-                    result = new Result(false,"用户名已存在");
-                }
-            }else {
-                result = new Result(false,"用户名或密码为null");
-            }
-        }else {
-            result = new Result(false,"参数不能为null");
-        }
-        return result;
-    }
-
 }

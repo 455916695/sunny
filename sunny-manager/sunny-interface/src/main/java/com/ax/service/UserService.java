@@ -1,9 +1,10 @@
 package com.ax.service;
+import java.util.List;
+
 import com.ax.entity.PageResult;
 import com.ax.entity.Result;
-import com.ax.pojo.User;
+import com.ax.pojo.TbUser;
 
-import java.util.List;
 
 /**
  * 服务层接口
@@ -12,11 +13,18 @@ import java.util.List;
  */
 public interface UserService {
 
+
+	/**
+	 *  登陆
+	 *
+	 * */
+	public Result login(TbUser user);
+
 	/**
 	 * 返回全部列表
 	 * @return
 	 */
-	public List<User> findAll();
+	public List<TbUser> findAll();
 	
 	
 	/**
@@ -29,13 +37,13 @@ public interface UserService {
 	/**
 	 * 增加
 	*/
-	public void add(User user);
+	public void add(TbUser user);
 	
 	
 	/**
 	 * 修改
 	 */
-	public void update(User user);
+	public void update(TbUser user);
 	
 
 	/**
@@ -43,14 +51,14 @@ public interface UserService {
 	 * @param id
 	 * @return
 	 */
-	public User findOne(String id);
+	public TbUser findOne(Long id);
 	
 	
 	/**
 	 * 批量删除
 	 * @param ids
 	 */
-	public void delete(String[] ids);
+	public void delete(Long[] ids);
 
 	/**
 	 * 分页
@@ -58,19 +66,10 @@ public interface UserService {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	public PageResult findPage(User user, int pageNum, int pageSize);
+	public PageResult findPage(TbUser user, int pageNum, int pageSize);
 
 	/**
-	 * 登陆
-	 * @Param user 用户
-	 * @return
+	 * 注册
 	 * */
-    Result login(User user);
-
-    /**
-	 *注册
-	 * @Param user 用户
-	 * @return
-	 * */
-	Result register(User user);
+    Result register(TbUser user);
 }

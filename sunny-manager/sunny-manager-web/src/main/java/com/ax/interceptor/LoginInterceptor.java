@@ -2,9 +2,8 @@ package com.ax.interceptor;
 
 
 import com.ax.entity.Result;
-import com.ax.pojo.User;
+import com.ax.pojo.TbUser;
 import com.ax.util.JsonUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,8 +22,8 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 //        请求处理前
         HttpSession session = httpServletRequest.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null || StringUtils.isEmpty(user.getUuid())) {
+        TbUser user = (TbUser) session.getAttribute("user");
+        if (user == null || user.getId() == null) {
 //            将拦截原因返回给前台
 //            重置response
             httpServletResponse.reset();
@@ -33,7 +32,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             httpServletResponse.setContentType("application/json;charset=UTF-8");
 
             PrintWriter writer = httpServletResponse.getWriter();
-            writer.write(JsonUtils.objectToJson(new Result(false,"未登录")));
+            writer.write(JsonUtils.objectToJson(new Result(false, "未登录")));
             writer.flush();
             writer.close();
             return false; //false 表示拦截

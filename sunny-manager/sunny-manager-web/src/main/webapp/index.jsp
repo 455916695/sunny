@@ -14,9 +14,11 @@
 <body>
     你好
 
-    <img src="${pageContext.request.contextPath}/img/showImg?imgPath=D:\file\photo\testIm.png" style="height: 200px;">
+    <%--<img src="${pageContext.request.contextPath}/img/showImg?imgPath=http://119.23.12.250:8090/images/test.bmp" style="height: 200px;">--%>
+    <img src="http://119.23.12.250:8090/images/test.bmp" style="height: 200px;">
 
-    <form action="${pageContext.request.contextPath}/img/imgUpload" method="post" enctype="multipart/form-data">
+    <%--<form action="${pageContext.request.contextPath}/img/imgUpload" method="post" enctype="multipart/form-data">--%>
+    <form action="${pageContext.request.contextPath}/image/imgUpload" method="post" enctype="multipart/form-data">
         图片:<input type="file" name="imgFile"/><br/>
          <input type="submit" value="提交"/>
     </form>

@@ -1,21 +1,24 @@
 package com.ax.service;
+import java.io.File;
 import java.util.List;
 
 import com.ax.entity.PageResult;
-import com.ax.pojo.TbComment;
+import com.ax.entity.Result;
+import com.ax.pojo.TbImage;
+import com.ax.pojo.TbUser;
 
 /**
  * 服务层接口
  * @author Administrator
  *
  */
-public interface CommentService {
+public interface ImageService {
 
 	/**
 	 * 返回全部列表
 	 * @return
 	 */
-	public List<TbComment> findAll();
+	public List<TbImage> findAll();
 	
 	
 	/**
@@ -28,13 +31,13 @@ public interface CommentService {
 	/**
 	 * 增加
 	*/
-	public void add(TbComment comment);
+	public void add(TbImage image);
 	
 	
 	/**
 	 * 修改
 	 */
-	public void update(TbComment comment);
+	public void update(TbImage image);
 	
 
 	/**
@@ -42,7 +45,7 @@ public interface CommentService {
 	 * @param id
 	 * @return
 	 */
-	public TbComment findOne(Long id);
+	public TbImage findOne(Long id);
 	
 	
 	/**
@@ -57,6 +60,7 @@ public interface CommentService {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	public PageResult findPage(TbComment comment, int pageNum, int pageSize);
-	
+	public PageResult findPage(TbImage image, int pageNum, int pageSize);
+
+	File upload(String servicePath,String originalFilename, int kind, TbUser user);
 }

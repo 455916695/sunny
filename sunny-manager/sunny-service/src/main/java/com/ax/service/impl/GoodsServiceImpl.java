@@ -2,9 +2,9 @@ package com.ax.service.impl;
 import java.util.List;
 
 import com.ax.entity.PageResult;
-import com.ax.mapper.GoodsMapper;
-import com.ax.pojo.Goods;
-import com.ax.pojo.GoodsExample;
+import com.ax.mapper.TbGoodsMapper;
+import com.ax.pojo.TbGoods;
+import com.ax.pojo.TbGoodsExample;
 import com.ax.service.GoodsService;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +22,13 @@ import org.springframework.stereotype.Service;
 public class GoodsServiceImpl implements GoodsService {
 
 	@Autowired
-	private GoodsMapper goodsMapper;
+	private TbGoodsMapper goodsMapper;
 	
 	/**
 	 * 查询全部
 	 */
 	@Override
-	public List<Goods> findAll() {
+	public List<TbGoods> findAll() {
 		return goodsMapper.selectByExample(null);
 	}
 
@@ -38,7 +38,7 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);		
-		Page<Goods> page=   (Page<Goods>) goodsMapper.selectByExample(new GoodsExample());
+		Page<TbGoods> page=   (Page<TbGoods>) goodsMapper.selectByExample(null);
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 
@@ -46,7 +46,7 @@ public class GoodsServiceImpl implements GoodsService {
 	 * 增加
 	 */
 	@Override
-	public void add(Goods goods) {
+	public void add(TbGoods goods) {
 		goodsMapper.insert(goods);		
 	}
 
@@ -55,7 +55,7 @@ public class GoodsServiceImpl implements GoodsService {
 	 * 修改
 	 */
 	@Override
-	public void update(Goods goods){
+	public void update(TbGoods goods){
 		goodsMapper.updateByPrimaryKey(goods);
 	}	
 	
@@ -65,7 +65,7 @@ public class GoodsServiceImpl implements GoodsService {
 	 * @return
 	 */
 	@Override
-	public Goods findOne(String id){
+	public TbGoods findOne(Long id){
 		return goodsMapper.selectByPrimaryKey(id);
 	}
 
@@ -73,34 +73,28 @@ public class GoodsServiceImpl implements GoodsService {
 	 * 批量删除
 	 */
 	@Override
-	public void delete(String[] ids) {
-		for(String id:ids){
+	public void delete(Long[] ids) {
+		for(Long id:ids){
 			goodsMapper.deleteByPrimaryKey(id);
 		}		
 	}
 	
 	
 		@Override
-	public PageResult findPage(Goods goods, int pageNum, int pageSize) {
+	public PageResult findPage(TbGoods goods, int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		
-		GoodsExample example=new GoodsExample();
-		GoodsExample.Criteria criteria = example.createCriteria();
+		TbGoodsExample example=new TbGoodsExample();
+		TbGoodsExample.Criteria criteria = example.createCriteria();
 		
 		if(goods!=null){			
-						if(goods.getUuid()!=null && goods.getUuid().length()>0){
-				criteria.andUuidLike("%"+goods.getUuid()+"%");
-			}
-			if(goods.getDescription()!=null && goods.getDescription().length()>0){
-				criteria.andDescriptionLike("%"+goods.getDescription()+"%");
-			}
-			if(goods.getDesimg()!=null && goods.getDesimg().length()>0){
-				criteria.andDesimgLike("%"+goods.getDesimg()+"%");
+						if(goods.getName()!=null && goods.getName().length()>0){
+				criteria.andNameLike("%"+goods.getName()+"%");
 			}
 	
 		}
 		
-		Page<Goods> page= (Page<Goods>)goodsMapper.selectByExample(example);
+		Page<TbGoods> page= (Page<TbGoods>)goodsMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 	

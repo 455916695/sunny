@@ -4,10 +4,11 @@ import java.util.List;
 
 import com.ax.entity.PageResult;
 import com.ax.entity.Result;
-import com.ax.pojo.TbCart;
-import com.ax.service.CartService;
+import com.ax.pojo.TbContent;
+import com.ax.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -17,11 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Administrator
  */
 @Controller
-@RequestMapping("/cart")
-public class CartController {
+@RequestMapping("/content")
+public class ContentController {
 
     @Autowired
-    private CartService cartService;
+    private ContentService contentService;
 
     /**
      * 返回全部列表
@@ -30,8 +31,8 @@ public class CartController {
      */
     @RequestMapping("/findAll")
     @ResponseBody
-    public List<TbCart> findAll() {
-        return cartService.findAll();
+    public List<TbContent> findAll() {
+        return contentService.findAll();
     }
 
 
@@ -43,20 +44,20 @@ public class CartController {
     @RequestMapping("/findPage")
     @ResponseBody
     public PageResult findPage(int page, int rows) {
-        return cartService.findPage(page, rows);
+        return contentService.findPage(page, rows);
     }
 
     /**
      * 增加
      *
-     * @param cart
+     * @param content
      * @return
      */
     @RequestMapping("/add")
     @ResponseBody
-    public Result add(TbCart cart) {
+    public Result add(TbContent content) {
         try {
-            cartService.add(cart);
+            contentService.add(content);
             return new Result(true, "增加成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,14 +68,14 @@ public class CartController {
     /**
      * 修改
      *
-     * @param cart
+     * @param content
      * @return
      */
     @RequestMapping("/update")
     @ResponseBody
-    public Result update(TbCart cart) {
+    public Result update(TbContent content) {
         try {
-            cartService.update(cart);
+            contentService.update(content);
             return new Result(true, "修改成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,8 +91,8 @@ public class CartController {
      */
     @RequestMapping("/findOne")
     @ResponseBody
-    public TbCart findOne(Long id) {
-        return cartService.findOne(id);
+    public TbContent findOne(Long id) {
+        return contentService.findOne(id);
     }
 
     /**
@@ -104,7 +105,7 @@ public class CartController {
     @ResponseBody
     public Result delete(Long[] ids) {
         try {
-            cartService.delete(ids);
+            contentService.delete(ids);
             return new Result(true, "删除成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,15 +116,15 @@ public class CartController {
     /**
      * 查询+分页
      *
-     * @param cart
+     * @param content
      * @param page
      * @param rows
      * @return
      */
     @RequestMapping("/search")
     @ResponseBody
-    public PageResult search(TbCart cart, int page, int rows) {
-        return cartService.findPage(cart, page, rows);
+    public PageResult search(TbContent content, int page, int rows) {
+        return contentService.findPage(content, page, rows);
     }
 
 }

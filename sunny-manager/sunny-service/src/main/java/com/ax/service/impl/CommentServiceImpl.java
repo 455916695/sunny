@@ -2,13 +2,14 @@ package com.ax.service.impl;
 import java.util.List;
 
 import com.ax.entity.PageResult;
-import com.ax.mapper.GoodsCommentMapper;
-import com.ax.pojo.GoodsComment;
-import com.ax.pojo.GoodsCommentExample;
+import com.ax.mapper.TbCommentMapper;
+import com.ax.pojo.TbComment;
+import com.ax.pojo.TbCommentExample;
 import com.ax.service.CommentService;
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
 
@@ -21,13 +22,13 @@ import org.springframework.stereotype.Service;
 public class CommentServiceImpl implements CommentService {
 
 	@Autowired
-	private GoodsCommentMapper commentMapper;
+	private TbCommentMapper commentMapper;
 	
 	/**
 	 * 查询全部
 	 */
 	@Override
-	public List<GoodsComment> findAll() {
+	public List<TbComment> findAll() {
 		return commentMapper.selectByExample(null);
 	}
 
@@ -37,7 +38,7 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);		
-		Page<GoodsComment> page=   (Page<GoodsComment>) commentMapper.selectByExample(new GoodsCommentExample());
+		Page<TbComment> page=   (Page<TbComment>) commentMapper.selectByExample(null);
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 
@@ -45,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
 	 * 增加
 	 */
 	@Override
-	public void add(GoodsComment comment) {
+	public void add(TbComment comment) {
 		commentMapper.insert(comment);		
 	}
 
@@ -54,7 +55,7 @@ public class CommentServiceImpl implements CommentService {
 	 * 修改
 	 */
 	@Override
-	public void update(GoodsComment comment){
+	public void update(TbComment comment){
 		commentMapper.updateByPrimaryKey(comment);
 	}	
 	
@@ -64,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
 	 * @return
 	 */
 	@Override
-	public GoodsComment findOne(String id){
+	public TbComment findOne(Long id){
 		return commentMapper.selectByPrimaryKey(id);
 	}
 
@@ -72,34 +73,25 @@ public class CommentServiceImpl implements CommentService {
 	 * 批量删除
 	 */
 	@Override
-	public void delete(String[] ids) {
-		for(String id:ids){
+	public void delete(Long[] ids) {
+		for(Long id:ids){
 			commentMapper.deleteByPrimaryKey(id);
 		}		
 	}
 	
 	
 		@Override
-	public PageResult findPage(GoodsComment comment, int pageNum, int pageSize) {
+	public PageResult findPage(TbComment comment, int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		
-		GoodsCommentExample example=new GoodsCommentExample();
-		GoodsCommentExample.Criteria criteria = example.createCriteria();
+		TbCommentExample example=new TbCommentExample();
+		TbCommentExample.Criteria criteria = example.createCriteria();
 		
 		if(comment!=null){			
-						if(comment.getUuid()!=null && comment.getUuid().length()>0){
-				criteria.andUuidLike("%"+comment.getUuid()+"%");
-			}
-			if(comment.getGid()!=null && comment.getGid().length()>0){
-				criteria.andGidLike("%"+comment.getGid()+"%");
-			}
-			if(comment.getComment()!=null && comment.getComment().length()>0){
-				criteria.andCommentLike("%"+comment.getComment()+"%");
-			}
-	
+				
 		}
 		
-		Page<GoodsComment> page= (Page<GoodsComment>)commentMapper.selectByExample(example);
+		Page<TbComment> page= (Page<TbComment>)commentMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 	

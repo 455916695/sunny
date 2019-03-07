@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.ax.entity.PageResult;
 import com.ax.entity.Result;
-import com.ax.pojo.TbCart;
-import com.ax.service.CartService;
+import com.ax.pojo.TbOrder;
+import com.ax.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Administrator
  */
 @Controller
-@RequestMapping("/cart")
-public class CartController {
+@RequestMapping("/order")
+public class OrderController {
 
     @Autowired
-    private CartService cartService;
+    private OrderService orderService;
 
     /**
      * 返回全部列表
@@ -30,8 +30,8 @@ public class CartController {
      */
     @RequestMapping("/findAll")
     @ResponseBody
-    public List<TbCart> findAll() {
-        return cartService.findAll();
+    public List<TbOrder> findAll() {
+        return orderService.findAll();
     }
 
 
@@ -43,20 +43,20 @@ public class CartController {
     @RequestMapping("/findPage")
     @ResponseBody
     public PageResult findPage(int page, int rows) {
-        return cartService.findPage(page, rows);
+        return orderService.findPage(page, rows);
     }
 
     /**
      * 增加
      *
-     * @param cart
+     * @param order
      * @return
      */
     @RequestMapping("/add")
     @ResponseBody
-    public Result add(TbCart cart) {
+    public Result add(TbOrder order) {
         try {
-            cartService.add(cart);
+            orderService.add(order);
             return new Result(true, "增加成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,14 +67,14 @@ public class CartController {
     /**
      * 修改
      *
-     * @param cart
+     * @param order
      * @return
      */
     @RequestMapping("/update")
     @ResponseBody
-    public Result update(TbCart cart) {
+    public Result update(TbOrder order) {
         try {
-            cartService.update(cart);
+            orderService.update(order);
             return new Result(true, "修改成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,8 +90,8 @@ public class CartController {
      */
     @RequestMapping("/findOne")
     @ResponseBody
-    public TbCart findOne(Long id) {
-        return cartService.findOne(id);
+    public TbOrder findOne(Long id) {
+        return orderService.findOne(id);
     }
 
     /**
@@ -104,7 +104,7 @@ public class CartController {
     @ResponseBody
     public Result delete(Long[] ids) {
         try {
-            cartService.delete(ids);
+            orderService.delete(ids);
             return new Result(true, "删除成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,15 +115,15 @@ public class CartController {
     /**
      * 查询+分页
      *
-     * @param cart
+     * @param order
      * @param page
      * @param rows
      * @return
      */
     @RequestMapping("/search")
     @ResponseBody
-    public PageResult search(TbCart cart, int page, int rows) {
-        return cartService.findPage(cart, page, rows);
+    public PageResult search(TbOrder order, int page, int rows) {
+        return orderService.findPage(order, page, rows);
     }
 
 }
