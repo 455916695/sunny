@@ -1,8 +1,10 @@
 package com.ax.service;
 import java.util.List;
 
+import com.ax.entity.Goods;
 import com.ax.entity.PageResult;
 import com.ax.pojo.TbGoods;
+import com.ax.pojo.TbUser;
 
 /**
  * 服务层接口
@@ -28,7 +30,7 @@ public interface GoodsService {
 	/**
 	 * 增加
 	*/
-	public void add(TbGoods goods);
+	public void add(Goods goods, TbUser user) throws Exception;
 	
 	
 	/**

@@ -2,14 +2,18 @@ package com.ax.controller;
 
 import java.util.List;
 
+import com.ax.entity.Goods;
 import com.ax.entity.PageResult;
 import com.ax.entity.Result;
 import com.ax.pojo.TbGoods;
+import com.ax.pojo.TbUser;
 import com.ax.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * controller
@@ -52,16 +56,19 @@ public class GoodsController {
      * @param goods
      * @return
      */
-    @RequestMapping("/add")
+    @RequestMapping("/add")   //TODO  此功能暂时开发到这里，可能存在一些bug
     @ResponseBody
-    public Result add(TbGoods goods) {
+    public Result add(Goods goods, HttpServletRequest request) {
         try {
-            goodsService.add(goods);
-            return new Result(true, "增加成功");
+            if (goods != null) {
+                TbUser user = (TbUser) request.getSession().getAttribute("user");
+                goodsService.add(goods,user);
+                return new Result(true, "增加成功");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false, "增加失败");
         }
+        return new Result(false, "增加失败");
     }
 
     /**

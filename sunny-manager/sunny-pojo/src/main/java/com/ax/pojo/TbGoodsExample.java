@@ -165,66 +165,6 @@ public class TbGoodsExample {
             return (Criteria) this;
         }
 
-        public Criteria andSellerIdIsNull() {
-            addCriterion("seller_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellerIdIsNotNull() {
-            addCriterion("seller_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellerIdEqualTo(Long value) {
-            addCriterion("seller_id =", value, "sellerId");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellerIdNotEqualTo(Long value) {
-            addCriterion("seller_id <>", value, "sellerId");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellerIdGreaterThan(Long value) {
-            addCriterion("seller_id >", value, "sellerId");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellerIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("seller_id >=", value, "sellerId");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellerIdLessThan(Long value) {
-            addCriterion("seller_id <", value, "sellerId");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellerIdLessThanOrEqualTo(Long value) {
-            addCriterion("seller_id <=", value, "sellerId");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellerIdIn(List<Long> values) {
-            addCriterion("seller_id in", values, "sellerId");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellerIdNotIn(List<Long> values) {
-            addCriterion("seller_id not in", values, "sellerId");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellerIdBetween(Long value1, Long value2) {
-            addCriterion("seller_id between", value1, value2, "sellerId");
-            return (Criteria) this;
-        }
-
-        public Criteria andSellerIdNotBetween(Long value1, Long value2) {
-            addCriterion("seller_id not between", value1, value2, "sellerId");
-            return (Criteria) this;
-        }
-
         public Criteria andNameIsNull() {
             addCriterion("name is null");
             return (Criteria) this;
@@ -295,6 +235,66 @@ public class TbGoodsExample {
             return (Criteria) this;
         }
 
+        public Criteria andSellerIdIsNull() {
+            addCriterion("seller_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerIdIsNotNull() {
+            addCriterion("seller_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerIdEqualTo(Long value) {
+            addCriterion("seller_id =", value, "sellerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerIdNotEqualTo(Long value) {
+            addCriterion("seller_id <>", value, "sellerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerIdGreaterThan(Long value) {
+            addCriterion("seller_id >", value, "sellerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("seller_id >=", value, "sellerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerIdLessThan(Long value) {
+            addCriterion("seller_id <", value, "sellerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerIdLessThanOrEqualTo(Long value) {
+            addCriterion("seller_id <=", value, "sellerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerIdIn(List<Long> values) {
+            addCriterion("seller_id in", values, "sellerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerIdNotIn(List<Long> values) {
+            addCriterion("seller_id not in", values, "sellerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerIdBetween(Long value1, Long value2) {
+            addCriterion("seller_id between", value1, value2, "sellerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerIdNotBetween(Long value1, Long value2) {
+            addCriterion("seller_id not between", value1, value2, "sellerId");
+            return (Criteria) this;
+        }
+
         public Criteria andContentIdIsNull() {
             addCriterion("content_id is null");
             return (Criteria) this;
@@ -352,6 +352,66 @@ public class TbGoodsExample {
 
         public Criteria andContentIdNotBetween(Long value1, Long value2) {
             addCriterion("content_id not between", value1, value2, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIdIsNull() {
+            addCriterion("type_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIdIsNotNull() {
+            addCriterion("type_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIdEqualTo(Byte value) {
+            addCriterion("type_id =", value, "typeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIdNotEqualTo(Byte value) {
+            addCriterion("type_id <>", value, "typeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIdGreaterThan(Byte value) {
+            addCriterion("type_id >", value, "typeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIdGreaterThanOrEqualTo(Byte value) {
+            addCriterion("type_id >=", value, "typeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIdLessThan(Byte value) {
+            addCriterion("type_id <", value, "typeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIdLessThanOrEqualTo(Byte value) {
+            addCriterion("type_id <=", value, "typeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIdIn(List<Byte> values) {
+            addCriterion("type_id in", values, "typeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIdNotIn(List<Byte> values) {
+            addCriterion("type_id not in", values, "typeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIdBetween(Byte value1, Byte value2) {
+            addCriterion("type_id between", value1, value2, "typeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIdNotBetween(Byte value1, Byte value2) {
+            addCriterion("type_id not between", value1, value2, "typeId");
             return (Criteria) this;
         }
 
@@ -472,6 +532,126 @@ public class TbGoodsExample {
 
         public Criteria andPriceNotBetween(Integer value1, Integer value2) {
             addCriterion("price not between", value1, value2, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andOldDegreeIsNull() {
+            addCriterion("old_degree is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOldDegreeIsNotNull() {
+            addCriterion("old_degree is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOldDegreeEqualTo(Byte value) {
+            addCriterion("old_degree =", value, "oldDegree");
+            return (Criteria) this;
+        }
+
+        public Criteria andOldDegreeNotEqualTo(Byte value) {
+            addCriterion("old_degree <>", value, "oldDegree");
+            return (Criteria) this;
+        }
+
+        public Criteria andOldDegreeGreaterThan(Byte value) {
+            addCriterion("old_degree >", value, "oldDegree");
+            return (Criteria) this;
+        }
+
+        public Criteria andOldDegreeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("old_degree >=", value, "oldDegree");
+            return (Criteria) this;
+        }
+
+        public Criteria andOldDegreeLessThan(Byte value) {
+            addCriterion("old_degree <", value, "oldDegree");
+            return (Criteria) this;
+        }
+
+        public Criteria andOldDegreeLessThanOrEqualTo(Byte value) {
+            addCriterion("old_degree <=", value, "oldDegree");
+            return (Criteria) this;
+        }
+
+        public Criteria andOldDegreeIn(List<Byte> values) {
+            addCriterion("old_degree in", values, "oldDegree");
+            return (Criteria) this;
+        }
+
+        public Criteria andOldDegreeNotIn(List<Byte> values) {
+            addCriterion("old_degree not in", values, "oldDegree");
+            return (Criteria) this;
+        }
+
+        public Criteria andOldDegreeBetween(Byte value1, Byte value2) {
+            addCriterion("old_degree between", value1, value2, "oldDegree");
+            return (Criteria) this;
+        }
+
+        public Criteria andOldDegreeNotBetween(Byte value1, Byte value2) {
+            addCriterion("old_degree not between", value1, value2, "oldDegree");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeansIsNull() {
+            addCriterion("means is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeansIsNotNull() {
+            addCriterion("means is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeansEqualTo(Byte value) {
+            addCriterion("means =", value, "means");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeansNotEqualTo(Byte value) {
+            addCriterion("means <>", value, "means");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeansGreaterThan(Byte value) {
+            addCriterion("means >", value, "means");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeansGreaterThanOrEqualTo(Byte value) {
+            addCriterion("means >=", value, "means");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeansLessThan(Byte value) {
+            addCriterion("means <", value, "means");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeansLessThanOrEqualTo(Byte value) {
+            addCriterion("means <=", value, "means");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeansIn(List<Byte> values) {
+            addCriterion("means in", values, "means");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeansNotIn(List<Byte> values) {
+            addCriterion("means not in", values, "means");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeansBetween(Byte value1, Byte value2) {
+            addCriterion("means between", value1, value2, "means");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeansNotBetween(Byte value1, Byte value2) {
+            addCriterion("means not between", value1, value2, "means");
             return (Criteria) this;
         }
 

@@ -3,11 +3,14 @@
 <mapper namespace="com.ax.mapper.TbGoodsMapper" >
   <resultMap id="BaseResultMap" type="com.ax.pojo.TbGoods" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="seller_id" property="sellerId" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="seller_id" property="sellerId" jdbcType="BIGINT" />
     <result column="content_id" property="contentId" jdbcType="BIGINT" />
+    <result column="type_id" property="typeId" jdbcType="TINYINT" />
     <result column="number" property="number" jdbcType="INTEGER" />
     <result column="price" property="price" jdbcType="INTEGER" />
+    <result column="old_degree" property="oldDegree" jdbcType="TINYINT" />
+    <result column="means" property="means" jdbcType="TINYINT" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -71,7 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, seller_id, name, content_id, number, price, status, create_time, update_time
+    id, name, seller_id, content_id, type_id, number, price, old_degree, means, status, 
+    create_time, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ax.pojo.TbGoodsExample" >
     select
@@ -104,12 +108,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.ax.pojo.TbGoods" >
-    insert into tb_goods (id, seller_id, name, 
-      content_id, number, price, 
+    insert into tb_goods (id, name, seller_id, 
+      content_id, type_id, number, 
+      price, old_degree, means, 
       status, create_time, update_time
       )
-    values (#{id,jdbcType=BIGINT}, #{sellerId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
-      #{contentId,jdbcType=BIGINT}, #{number,jdbcType=INTEGER}, #{price,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{sellerId,jdbcType=BIGINT}, 
+      #{contentId,jdbcType=BIGINT}, #{typeId,jdbcType=TINYINT}, #{number,jdbcType=INTEGER}, 
+      #{price,jdbcType=INTEGER}, #{oldDegree,jdbcType=TINYINT}, #{means,jdbcType=TINYINT}, 
       #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -119,20 +125,29 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="sellerId != null" >
-        seller_id,
-      </if>
       <if test="name != null" >
         name,
       </if>
+      <if test="sellerId != null" >
+        seller_id,
+      </if>
       <if test="contentId != null" >
         content_id,
+      </if>
+      <if test="typeId != null" >
+        type_id,
       </if>
       <if test="number != null" >
         number,
       </if>
       <if test="price != null" >
         price,
+      </if>
+      <if test="oldDegree != null" >
+        old_degree,
+      </if>
+      <if test="means != null" >
+        means,
       </if>
       <if test="status != null" >
         status,
@@ -148,20 +163,29 @@
       <if test="id != null" >
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="sellerId != null" >
-        #{sellerId,jdbcType=BIGINT},
-      </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
       </if>
+      <if test="sellerId != null" >
+        #{sellerId,jdbcType=BIGINT},
+      </if>
       <if test="contentId != null" >
         #{contentId,jdbcType=BIGINT},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=TINYINT},
       </if>
       <if test="number != null" >
         #{number,jdbcType=INTEGER},
       </if>
       <if test="price != null" >
         #{price,jdbcType=INTEGER},
+      </if>
+      <if test="oldDegree != null" >
+        #{oldDegree,jdbcType=TINYINT},
+      </if>
+      <if test="means != null" >
+        #{means,jdbcType=TINYINT},
       </if>
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
@@ -186,20 +210,29 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.sellerId != null" >
-        seller_id = #{record.sellerId,jdbcType=BIGINT},
-      </if>
       <if test="record.name != null" >
         name = #{record.name,jdbcType=VARCHAR},
       </if>
+      <if test="record.sellerId != null" >
+        seller_id = #{record.sellerId,jdbcType=BIGINT},
+      </if>
       <if test="record.contentId != null" >
         content_id = #{record.contentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.typeId != null" >
+        type_id = #{record.typeId,jdbcType=TINYINT},
       </if>
       <if test="record.number != null" >
         number = #{record.number,jdbcType=INTEGER},
       </if>
       <if test="record.price != null" >
         price = #{record.price,jdbcType=INTEGER},
+      </if>
+      <if test="record.oldDegree != null" >
+        old_degree = #{record.oldDegree,jdbcType=TINYINT},
+      </if>
+      <if test="record.means != null" >
+        means = #{record.means,jdbcType=TINYINT},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=INTEGER},
@@ -218,11 +251,14 @@
   <update id="updateByExample" parameterType="map" >
     update tb_goods
     set id = #{record.id,jdbcType=BIGINT},
-      seller_id = #{record.sellerId,jdbcType=BIGINT},
       name = #{record.name,jdbcType=VARCHAR},
+      seller_id = #{record.sellerId,jdbcType=BIGINT},
       content_id = #{record.contentId,jdbcType=BIGINT},
+      type_id = #{record.typeId,jdbcType=TINYINT},
       number = #{record.number,jdbcType=INTEGER},
       price = #{record.price,jdbcType=INTEGER},
+      old_degree = #{record.oldDegree,jdbcType=TINYINT},
+      means = #{record.means,jdbcType=TINYINT},
       status = #{record.status,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
@@ -233,20 +269,29 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.ax.pojo.TbGoods" >
     update tb_goods
     <set >
-      <if test="sellerId != null" >
-        seller_id = #{sellerId,jdbcType=BIGINT},
-      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="sellerId != null" >
+        seller_id = #{sellerId,jdbcType=BIGINT},
+      </if>
       <if test="contentId != null" >
         content_id = #{contentId,jdbcType=BIGINT},
+      </if>
+      <if test="typeId != null" >
+        type_id = #{typeId,jdbcType=TINYINT},
       </if>
       <if test="number != null" >
         number = #{number,jdbcType=INTEGER},
       </if>
       <if test="price != null" >
         price = #{price,jdbcType=INTEGER},
+      </if>
+      <if test="oldDegree != null" >
+        old_degree = #{oldDegree,jdbcType=TINYINT},
+      </if>
+      <if test="means != null" >
+        means = #{means,jdbcType=TINYINT},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
@@ -262,11 +307,14 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.ax.pojo.TbGoods" >
     update tb_goods
-    set seller_id = #{sellerId,jdbcType=BIGINT},
-      name = #{name,jdbcType=VARCHAR},
+    set name = #{name,jdbcType=VARCHAR},
+      seller_id = #{sellerId,jdbcType=BIGINT},
       content_id = #{contentId,jdbcType=BIGINT},
+      type_id = #{typeId,jdbcType=TINYINT},
       number = #{number,jdbcType=INTEGER},
       price = #{price,jdbcType=INTEGER},
+      old_degree = #{oldDegree,jdbcType=TINYINT},
+      means = #{means,jdbcType=TINYINT},
       status = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
