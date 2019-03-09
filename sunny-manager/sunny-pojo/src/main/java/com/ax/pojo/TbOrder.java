@@ -23,6 +23,8 @@ public class TbOrder {
 
     private Date updateTime;
 
+    private Byte status;
+
     public Long getId() {
         return id;
     }
@@ -101,5 +103,13 @@ public class TbOrder {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 }

@@ -17,6 +17,19 @@ public class TbImage {
 
     private Date updateTime;
 
+    public TbImage() {
+    }
+
+    public TbImage(Long id, Integer kind, Long kindId, String address, Integer status, Date createTime, Date updateTime) {
+        this.id = id;
+        this.kind = kind;
+        this.kindId = kindId;
+        this.address = address;
+        this.status = status;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+    }
+
     public Long getId() {
         return id;
     }

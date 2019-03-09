@@ -1,15 +1,18 @@
 package com.ax.service.impl;
 
+import java.awt.*;
 import java.util.Date;
 import java.util.List;
 
 import com.ax.entity.PageResult;
 import com.ax.entity.Result;
+import com.ax.mapper.TbImageMapper;
 import com.ax.mapper.TbUserMapper;
+import com.ax.pojo.TbImage;
+import com.ax.pojo.TbImageExample;
 import com.ax.pojo.TbUser;
 import com.ax.pojo.TbUserExample;
 import com.ax.service.UserService;
-import com.ax.util.IdWorker;
 import com.ax.util.MD5Utils;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +33,14 @@ public class UserServiceImpl implements UserService {
 
     private static final int DEFAULT_VALUE = 0; //0 默认参数值,及无指定参数
 
+    private static final int IMAGE_KIND = 1; //1 表示头像类型
+
+    private static final int IMAGE_STATUS_DELETE = 2; //表示图片状态 2为删除
     @Autowired
     private TbUserMapper userMapper;
+
+    @Autowired
+    private TbImageMapper imageMapper;
 
     /**
      * 查询全部
@@ -170,6 +179,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void update(TbUser user) {
+        user.setUpdateTime(new Date());
         userMapper.updateByPrimaryKeySelective(user);
     }
 

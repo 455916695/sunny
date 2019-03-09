@@ -5,11 +5,15 @@ import java.util.List;
 import com.ax.entity.PageResult;
 import com.ax.entity.Result;
 import com.ax.pojo.TbOrder;
+import com.ax.pojo.TbUser;
 import com.ax.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * controller
@@ -24,7 +28,7 @@ public class OrderController {
     private OrderService orderService;
 
     /**
-     * 返回全部列表
+     * 返回全部订单
      *
      * @return
      */
@@ -36,17 +40,6 @@ public class OrderController {
 
 
     /**
-     * 返回全部列表
-     *
-     * @return
-     */
-    @RequestMapping("/findPage")
-    @ResponseBody
-    public PageResult findPage(int page, int rows) {
-        return orderService.findPage(page, rows);
-    }
-
-    /**
      * 增加
      *
      * @param order
@@ -54,8 +47,12 @@ public class OrderController {
      */
     @RequestMapping("/add")
     @ResponseBody
-    public Result add(TbOrder order) {
+    public Result add(TbOrder order, HttpServletRequest request) {
         try {
+            if (order.getBuyerId() == null) {  //此处认为order不会为null 为前提
+                TbUser user = (TbUser) request.getSession().getAttribute("user");
+                order.setBuyerId(user.getId());
+            }
             orderService.add(order);
             return new Result(true, "增加成功");
         } catch (Exception e) {
@@ -90,8 +87,15 @@ public class OrderController {
      */
     @RequestMapping("/findOne")
     @ResponseBody
-    public TbOrder findOne(Long id) {
-        return orderService.findOne(id);
+    public Result findOne(Long id) {
+        Result result = null;
+        try {
+            TbOrder one = orderService.findOne(id);
+            result = new Result(true, "查询成功", one);
+        } catch (Exception e) {
+            result = new Result(false, "查询失败:异常");
+        }
+        return result;
     }
 
     /**
@@ -124,6 +128,27 @@ public class OrderController {
     @ResponseBody
     public PageResult search(TbOrder order, int page, int rows) {
         return orderService.findPage(order, page, rows);
+    }
+
+
+    //TODO  准备开发 订单管理
+
+    /**
+     * 返回全部列表
+     *
+     * @return
+     */
+    @RequestMapping("/findPage")
+    @ResponseBody
+    public Result findPage(TbOrder order, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize, HttpServletRequest request) {
+        Result result = null;
+        try {
+            TbUser user = (TbUser) request.getSession().getAttribute("user");
+            result = orderService.findPage(pageNum, pageSize, user, order);
+        } catch (Exception e) {
+            result = new Result(false, "查询失败:异常");
+        }
+        return result;
     }
 
 }

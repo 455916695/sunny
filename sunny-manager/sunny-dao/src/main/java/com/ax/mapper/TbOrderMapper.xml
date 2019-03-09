@@ -12,6 +12,7 @@
     <result column="seller_address" property="sellerAddress" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="TINYINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -73,7 +74,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, buyer_id, seller_id, goods_id, number, money, buyer_address, seller_address, 
-    create_time, update_time
+    create_time, update_time, status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ax.pojo.TbOrderExample" >
     select
@@ -109,11 +110,11 @@
     insert into tb_order (id, buyer_id, seller_id, 
       goods_id, number, money, 
       buyer_address, seller_address, create_time, 
-      update_time)
+      update_time, status)
     values (#{id,jdbcType=BIGINT}, #{buyerId,jdbcType=BIGINT}, #{sellerId,jdbcType=BIGINT}, 
       #{goodsId,jdbcType=BIGINT}, #{number,jdbcType=INTEGER}, #{money,jdbcType=INTEGER}, 
       #{buyerAddress,jdbcType=VARCHAR}, #{sellerAddress,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.ax.pojo.TbOrder" >
     insert into tb_order
@@ -148,6 +149,9 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -179,6 +183,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -221,6 +228,9 @@
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -237,7 +247,8 @@
       buyer_address = #{record.buyerAddress,jdbcType=VARCHAR},
       seller_address = #{record.sellerAddress,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=TINYINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,6 +283,9 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -285,7 +299,8 @@
       buyer_address = #{buyerAddress,jdbcType=VARCHAR},
       seller_address = #{sellerAddress,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
