@@ -8,8 +8,8 @@ import com.ax.pojo.TbUser;
 import com.ax.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -117,7 +117,7 @@ public class UserController {
     }
 
     /**
-     * 修改
+     * 修改个人信息
      *
      * @param user
      * @return
@@ -136,14 +136,25 @@ public class UserController {
 
     /**
      * 获取实体
+     * 根据用户id查询用户信息
      *
      * @param id
      * @return
      */
     @RequestMapping("/findOne")
     @ResponseBody
-    public TbUser findOne(Long id) {
-        return userService.findOne(id);
+    public Result findOne(@RequestParam(defaultValue = "0") Long id, HttpServletRequest request) {
+        Result result = null;
+        try {
+            if (id == null || id == 0) {
+                TbUser user = (TbUser) request.getSession().getAttribute("user");
+                id = user.getId();
+            }
+            result = userService.findOne(id);
+        } catch (Exception e) {
+            result = new Result(false, "查询失败:系统异常");
+        }
+        return result;
     }
 
     /**

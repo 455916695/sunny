@@ -1,5 +1,6 @@
 package com.ax.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ax.entity.PageResult;
@@ -25,6 +26,9 @@ import org.springframework.util.StringUtils;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
+
+    private static final int DEFAULT_VALUE = 0; //0 默认参数值,及无指定参数
 
     @Autowired
     private TbUserMapper userMapper;
@@ -82,8 +86,9 @@ public class UserServiceImpl implements UserService {
             if (tbUsers != null && tbUsers.size() > 0) {
                 result = new Result(false, "注册失败:用户已存在");
             } else {
-                user.setId(new IdWorker().nextId());
+//                user.setId(new IdWorker().nextId());   //自增长
                 user.setPassword(MD5Utils.md5(user.getPassword()));
+                value(user);
                 userMapper.insert(user);
                 result = new Result(true, "注册成功");
             }
@@ -107,7 +112,56 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void add(TbUser user) {
+        value(user);
         userMapper.insert(user);
+    }
+
+    /**
+     * 为user对象赋初值
+     */
+    private void value(TbUser user) {
+        if (StringUtils.isEmpty(user.getName())) {
+            user.setName("未命名");
+        }
+        if (StringUtils.isEmpty(user.getAddress())) {
+            user.setAddress("未命名");
+        }
+        if (StringUtils.isEmpty(user.getSchool())) {
+            user.setSchool("未命名");
+        }
+        if (StringUtils.isEmpty(user.getEmail())) {
+            user.setEmail("未命名");
+        }
+        if (StringUtils.isEmpty(user.getWechat())) {
+            user.setWechat("未命名");
+        }
+        if (StringUtils.isEmpty(user.getPhone())) {
+            user.setPhone("未命名");
+        }
+        if (user.getBirthday() == null) {
+            user.setBirthday(new Date());
+        }
+        if (user.getCreatTime() == null) {
+            user.setCreatTime(new Date());
+        }
+        if (user.getUpdateTime() == null) {
+            user.setUpdateTime(new Date());
+        }
+        if (user.getEmpiricalValue() == null) {
+            user.setEmpiricalValue(0);
+        }
+        if (user.getSex() == null) {
+            user.setSex(0);
+        }
+        if (user.getResidueScore() == null) {
+            user.setResidueScore(0);
+        }
+        if (user.getTopScores() == null) {
+            user.setTopScores(0);
+        }
+        if (user.getTotalScore() == null) {
+            user.setTotalScore(0);
+        }
     }
 
 
@@ -116,7 +170,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void update(TbUser user) {
-        userMapper.updateByPrimaryKey(user);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     /**
@@ -126,8 +180,18 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public TbUser findOne(Long id) {
-        return userMapper.selectByPrimaryKey(id);
+    public Result findOne(Long id) {
+
+        Result result = null;
+        if (id != null && id != DEFAULT_VALUE) {
+            TbUser tbUser = userMapper.selectByPrimaryKey(id);
+            tbUser.setPassword("");   //TODO 此处存在需要修改的地方,抹去指定不需要展示给用户的数据
+            result = new Result(true, "查询成功", tbUser);
+        } else {
+            result = new Result(false, "查询失败:系统异常");
+        }
+
+        return result;
     }
 
     /**

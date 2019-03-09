@@ -1,25 +1,25 @@
 package com.ax.pojo;
 
 public class TbType {
-    private Integer id;
+    private Long id;
 
-    private Integer parentId;
+    private Long parentId;
 
     private String type;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(Integer parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 

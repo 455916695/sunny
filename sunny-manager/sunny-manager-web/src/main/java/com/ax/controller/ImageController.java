@@ -10,12 +10,10 @@ import com.ax.entity.Result;
 import com.ax.pojo.TbImage;
 import com.ax.pojo.TbUser;
 import com.ax.service.ImageService;
-import com.ax.util.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -85,8 +83,8 @@ public class ImageController {
                 user = (TbUser) request.getSession().getAttribute("user");
             }
             File file = imageService.upload(IMAGE_SERVER_PATH, imgFile.getOriginalFilename(), kind, user);
-            imgFile.transferTo(file);
-            imageService.add(new TbImage(new IdWorker().nextId(), kind, user.getId(), file.getPath()));
+            imgFile.transferTo(file);  //只负责上传图片,不负责,将图片地址一些信息保存到数据库
+//            imageService.add(new TbImage(new IdWorker().nextId(), kind, user.getId(), file.getPath()));
             result = new Result(true, "上传成功", file.getPath());
         } catch (Exception e) {
             e.printStackTrace();

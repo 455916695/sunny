@@ -5,27 +5,17 @@ import java.util.Date;
 public class TbImage {
     private Long id;
 
-    private Integer kind;  //图片种类 1 用户头像  2 商品图片
+    private Integer kind;
 
-    private Long kindId; //来源id   （1用户id 或 2商品id）
+    private Long kindId;
 
     private String address;
 
-    private Integer status; //状态  1 正常  2 删除
+    private Integer status;
 
     private Date createTime;
 
     private Date updateTime;
-
-    public TbImage() {
-    }
-
-    public TbImage(Long id, Integer kind, Long kindId, String address) {
-        this.id = id;
-        this.kind = kind;
-        this.kindId = kindId;
-        this.address = address;
-    }
 
     public Long getId() {
         return id;

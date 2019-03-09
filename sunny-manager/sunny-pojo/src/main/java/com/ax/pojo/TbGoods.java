@@ -11,40 +11,21 @@ public class TbGoods {
 
     private Long contentId;
 
-    private Byte typeId;  //类型id
+    private Byte typeId;
 
     private Integer number;
 
     private Integer price;
 
-    private Byte oldDegree; //新旧程度
+    private Byte oldDegree;
 
-    private Byte means;  //销售方式
+    private Byte means;
 
-    private Integer status; //商品状态
+    private Integer status;
 
     private Date createTime;
 
     private Date updateTime;
-
-
-    public TbGoods() {
-    }
-
-    public TbGoods(Long id, String name, Long sellerId, Long contentId, Byte typeId, Integer number, Integer price, Byte oldDegree, Byte means, Integer status, Date createTime, Date updateTime) {
-        this.id = id;
-        this.name = name;
-        this.sellerId = sellerId;
-        this.contentId = contentId;
-        this.typeId = typeId;
-        this.number = number;
-        this.price = price;
-        this.oldDegree = oldDegree;
-        this.means = means;
-        this.status = status;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
-    }
 
     public Long getId() {
         return id;

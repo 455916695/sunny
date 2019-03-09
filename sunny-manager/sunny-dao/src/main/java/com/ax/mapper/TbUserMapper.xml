@@ -17,8 +17,8 @@
     <result column="residue_score" property="residueScore" jdbcType="INTEGER" />
     <result column="empirical_value" property="empiricalValue" jdbcType="INTEGER" />
     <result column="top_scores" property="topScores" jdbcType="INTEGER" />
-    <result column="creat_time" property="creatTime" jdbcType="DATE" />
-    <result column="update_time" property="updateTime" jdbcType="DATE" />
+    <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -124,7 +124,7 @@
       #{address,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, 
       #{wechat,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{totalScore,jdbcType=INTEGER}, 
       #{residueScore,jdbcType=INTEGER}, #{empiricalValue,jdbcType=INTEGER}, #{topScores,jdbcType=INTEGER}, 
-      #{creatTime,jdbcType=DATE}, #{updateTime,jdbcType=DATE})
+      #{creatTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.ax.pojo.TbUser" >
     insert into tb_user
@@ -228,10 +228,10 @@
         #{topScores,jdbcType=INTEGER},
       </if>
       <if test="creatTime != null" >
-        #{creatTime,jdbcType=DATE},
+        #{creatTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
-        #{updateTime,jdbcType=DATE},
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -290,10 +290,10 @@
         top_scores = #{record.topScores,jdbcType=INTEGER},
       </if>
       <if test="record.creatTime != null" >
-        creat_time = #{record.creatTime,jdbcType=DATE},
+        creat_time = #{record.creatTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateTime != null" >
-        update_time = #{record.updateTime,jdbcType=DATE},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -317,8 +317,8 @@
       residue_score = #{record.residueScore,jdbcType=INTEGER},
       empirical_value = #{record.empiricalValue,jdbcType=INTEGER},
       top_scores = #{record.topScores,jdbcType=INTEGER},
-      creat_time = #{record.creatTime,jdbcType=DATE},
-      update_time = #{record.updateTime,jdbcType=DATE}
+      creat_time = #{record.creatTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -369,10 +369,10 @@
         top_scores = #{topScores,jdbcType=INTEGER},
       </if>
       <if test="creatTime != null" >
-        creat_time = #{creatTime,jdbcType=DATE},
+        creat_time = #{creatTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=DATE},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -393,8 +393,8 @@
       residue_score = #{residueScore,jdbcType=INTEGER},
       empirical_value = #{empiricalValue,jdbcType=INTEGER},
       top_scores = #{topScores,jdbcType=INTEGER},
-      creat_time = #{creatTime,jdbcType=DATE},
-      update_time = #{updateTime,jdbcType=DATE}
+      creat_time = #{creatTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

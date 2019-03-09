@@ -3,7 +3,6 @@ import java.io.File;
 import java.util.List;
 
 import com.ax.entity.PageResult;
-import com.ax.entity.Result;
 import com.ax.pojo.TbImage;
 import com.ax.pojo.TbUser;
 

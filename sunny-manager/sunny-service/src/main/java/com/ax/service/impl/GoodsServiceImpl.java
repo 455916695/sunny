@@ -69,10 +69,10 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public void add(Goods goods, TbUser user) throws Exception {
-        IdWorker idWorker = new IdWorker();
+//        IdWorker idWorker = new IdWorker();
         //添加商品id
         TbGoods tbGoods = new TbGoods();
-        tbGoods.setId(idWorker.nextId());
+//        tbGoods.setId(idWorker.nextId());   //自增长
         if (goods != null) { //TODO 此处需要校验，什么样的商品算空
             if (!StringUtils.isEmpty(goods.getName())) {//设置商品名称
                 tbGoods.setName(goods.getName());
@@ -115,18 +115,20 @@ public class GoodsServiceImpl implements GoodsService {
 //保存描述
             if (!StringUtils.isEmpty(goods.getContent())) {
                 TbContent tbContent = new TbContent();
-                tbContent.setId(idWorker.nextId());
+//                tbContent.setId(idWorker.nextId());  //自增长
                 tbContent.setContents(goods.getContent());
                 contentMapper.insert(tbContent);  //保存描述
                 tbGoods.setContentId(tbContent.getId());
             }
+
+            goodsMapper.insert(tbGoods);
 //保存图片
             List<String> imageList = goods.getImageList();
             if (imageList != null && imageList.size() > 0) {
                 TbImage tbImage = null;
                 for (String imageAddress : imageList) {
                     tbImage = new TbImage();
-                    tbImage.setId(idWorker.nextId());
+//                    tbImage.setId(idWorker.nextId()); //自增长
                     tbImage.setKind(KIND_SHOP); //图片种类 1 用户头像  2 商品图片
                     tbImage.setKindId(tbGoods.getId());
                     tbImage.setAddress(imageAddress);
@@ -136,10 +138,9 @@ public class GoodsServiceImpl implements GoodsService {
                     imageMapper.insert(tbImage);
                 }
             }
-        }else {
-            throw  new Exception("添加失败:非法参数异常");
+        } else {
+            throw new Exception("添加失败:非法参数异常");
         }
-        goodsMapper.insert(tbGoods);
     }
 
 

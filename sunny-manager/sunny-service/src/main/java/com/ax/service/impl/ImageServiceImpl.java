@@ -118,7 +118,8 @@ public class ImageServiceImpl implements ImageService {
 
         //此处存在一个参数判断是否合法，暂时省略
         StringBuffer path = new StringBuffer(IMAGE_SERVER_PATH);
-        path.append("images/").append(user.getUsername()).append("/");
+//        path.append("images/").append(user.getUsername()).append("/");
+        path.append("images/").append(user.getId()).append("/"); //用户id 是唯一不变的
         switch (kind) {
             case 1:
                 path.append("head").append("/");

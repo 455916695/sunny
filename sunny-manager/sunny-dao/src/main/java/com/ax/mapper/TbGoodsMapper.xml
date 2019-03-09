@@ -107,7 +107,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ax.pojo.TbGoods" >
+  <insert id="insert" parameterType="com.ax.pojo.TbGoods" useGeneratedKeys="true" keyProperty="id" >
     insert into tb_goods (id, name, seller_id, 
       content_id, type_id, number, 
       price, old_degree, means, 

@@ -1,6 +1,4 @@
 package com.ax.interceptor;
-
-
 import com.ax.entity.Result;
 import com.ax.pojo.TbUser;
 import com.ax.util.JsonUtils;
