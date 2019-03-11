@@ -1,6 +1,7 @@
 package com.ax.entity;
 
 import com.ax.pojo.TbGoods;
+import com.ax.pojo.TbImage;
 
 import java.util.Date;
 import java.util.List;
@@ -35,27 +36,25 @@ public class Goods extends TbGoods {
 
     private String content; //描述
 
-    private List<String> imageList;  //图片
+    private List<TbImage> imageList;  //图片
 
     public Goods() {
     }
 
-    public Goods(Long id, String name, Long sellerId, Long contentId, Byte typeId, Integer number, Integer price, Byte oldDegree, Byte means, Integer status, Date createTime, Date updateTime, String type, String content, List<String> imageList) {
-        this.id = id;
-        this.name = name;
-        this.sellerId = sellerId;
-        this.contentId = contentId;
-        this.typeId = typeId;
-        this.number = number;
-        this.price = price;
-        this.oldDegree = oldDegree;
-        this.means = means;
-        this.status = status;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
-        this.type = type;
-        this.content = content;
-        this.imageList = imageList;
+
+    public Goods(TbGoods tbGoods) {
+        this.id = tbGoods.getId();
+        this.name = tbGoods.getName();
+        this.sellerId = tbGoods.getSellerId();
+        this.contentId = tbGoods.getContentId();
+        this.typeId = tbGoods.getTypeId();
+        this.number = tbGoods.getNumber();
+        this.price = tbGoods.getPrice();
+        this.oldDegree = tbGoods.getOldDegree();
+        this.means = tbGoods.getMeans();
+        this.status = tbGoods.getStatus();
+        this.createTime = tbGoods.getCreateTime();
+        this.updateTime = tbGoods.getUpdateTime();
     }
 
     @Override
@@ -194,11 +193,11 @@ public class Goods extends TbGoods {
         this.content = content;
     }
 
-    public List<String> getImageList() {
+    public List<TbImage> getImageList() {
         return imageList;
     }
 
-    public void setImageList(List<String> imageList) {
+    public void setImageList(List<TbImage> imageList) {
         this.imageList = imageList;
     }
 }

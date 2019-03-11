@@ -8,6 +8,7 @@ import com.ax.pojo.TbUser;
 import com.ax.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,9 +32,26 @@ public class UserController {
     //TODO 校验验证码功能,暂时未完成
     @RequestMapping("check")
     @ResponseBody
-    public Result check() {
+    public Result check(String verify, HttpServletRequest request) {
+        Result result = null;
+        try {
+            String verifyCode = (String) request.getSession().getAttribute("verifyCode");
+            if (!StringUtils.isEmpty(verify) && StringUtils.isEmpty(verifyCode)) {
+                verify = verify.toLowerCase();
+                verifyCode = verifyCode.toLowerCase();
+                if (verify.equals(verifyCode)) {
+                    result = new Result(true, "验证码成功");
+                } else {
+                    result = new Result(false, "验证失败:验证码有误");
+                }
+            } else {
+                result = new Result(false, "验证失败:无指定参数");
+            }
+        } catch (Exception e) {
+            result = new Result(false, "验证失败:异常");
+        }
 
-        return null;
+        return result;
     }
 
     /**
@@ -41,10 +59,10 @@ public class UserController {
      */
     @RequestMapping("/login")
     @ResponseBody
-    public Result login(TbUser user, HttpServletRequest request) {
+    public Result login(TbUser user, HttpServletRequest request,String verify) {
         Result result = null;
         try {
-            check();
+            check(verify,request); //TODO  此处存在校验
             result = userService.login(user);
         } catch (Exception e) {
             e.printStackTrace();

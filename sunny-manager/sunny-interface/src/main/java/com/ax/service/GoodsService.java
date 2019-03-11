@@ -3,6 +3,7 @@ import java.util.List;
 
 import com.ax.entity.Goods;
 import com.ax.entity.PageResult;
+import com.ax.entity.Result;
 import com.ax.pojo.TbGoods;
 import com.ax.pojo.TbUser;
 
@@ -24,7 +25,7 @@ public interface GoodsService {
 	 * 返回分页列表
 	 * @return
 	 */
-	public PageResult findPage(int pageNum, int pageSize);
+	public Result findPage(int pageNum, int pageSize);
 	
 	
 	/**
@@ -36,7 +37,7 @@ public interface GoodsService {
 	/**
 	 * 修改
 	 */
-	public void update(TbGoods goods);
+	public void update(Goods goods);
 	
 
 	/**
@@ -44,7 +45,7 @@ public interface GoodsService {
 	 * @param id
 	 * @return
 	 */
-	public TbGoods findOne(Long id);
+	public Goods findOne(Long id);
 	
 	
 	/**
@@ -59,6 +60,6 @@ public interface GoodsService {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	public PageResult findPage(TbGoods goods, int pageNum, int pageSize);
+	public Result findPage(TbGoods goods, int pageNum, int pageSize);
 	
 }

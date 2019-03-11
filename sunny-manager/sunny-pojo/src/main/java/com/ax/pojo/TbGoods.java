@@ -1,5 +1,7 @@
 package com.ax.pojo;
 
+import com.ax.entity.Goods;
+
 import java.util.Date;
 
 public class TbGoods {
@@ -26,6 +28,24 @@ public class TbGoods {
     private Date createTime;
 
     private Date updateTime;
+
+    public TbGoods() {
+    }
+
+    public TbGoods(Goods goods) {
+        this.id = goods.getId();
+        this.name = goods.getName();
+        this.sellerId = goods.getSellerId();
+        this.contentId = goods.getContentId();
+        this.typeId = goods.getTypeId();
+        this.number = goods.getNumber();
+        this.price = goods.getPrice();
+        this.oldDegree = goods.getOldDegree();
+        this.means = goods.getMeans();
+        this.status = goods.getStatus();
+        this.createTime = goods.getCreateTime();
+        this.updateTime = goods.getUpdateTime();
+    }
 
     public Long getId() {
         return id;

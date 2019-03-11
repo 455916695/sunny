@@ -1,13 +1,16 @@
 package com.ax.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.ax.entity.Goods;
 import com.ax.entity.PageResult;
+import com.ax.entity.Result;
 import com.ax.mapper.TbContentMapper;
 import com.ax.mapper.TbGoodsMapper;
 import com.ax.mapper.TbImageMapper;
+import com.ax.mapper.TbTypeMapper;
 import com.ax.pojo.*;
 import com.ax.service.GoodsService;
 import com.ax.util.IdWorker;
@@ -46,6 +49,10 @@ public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private TbImageMapper imageMapper;
 
+
+    @Autowired
+    private TbTypeMapper typeMapper;
+
     /**
      * 查询全部
      */
@@ -58,10 +65,10 @@ public class GoodsServiceImpl implements GoodsService {
      * 按分页查询
      */
     @Override
-    public PageResult findPage(int pageNum, int pageSize) {
+    public Result findPage(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         Page<TbGoods> page = (Page<TbGoods>) goodsMapper.selectByExample(null);
-        return new PageResult(page.getTotal(), page.getResult());
+        return new Result(true, "查询成功", new PageResult(page.getTotal(), page.getResult()));
     }
 
     /**
@@ -123,15 +130,12 @@ public class GoodsServiceImpl implements GoodsService {
 
             goodsMapper.insert(tbGoods);
 //保存图片
-            List<String> imageList = goods.getImageList();
+            List<TbImage> imageList = goods.getImageList();
             if (imageList != null && imageList.size() > 0) {
-                TbImage tbImage = null;
-                for (String imageAddress : imageList) {
-                    tbImage = new TbImage();
+                for (TbImage tbImage : imageList) {
 //                    tbImage.setId(idWorker.nextId()); //自增长
                     tbImage.setKind(KIND_SHOP); //图片种类 1 用户头像  2 商品图片
                     tbImage.setKindId(tbGoods.getId());
-                    tbImage.setAddress(imageAddress);
                     tbImage.setStatus(NORMAL_IMAGE_STATUS);//状态  1 正常  2 删除
                     tbImage.setCreateTime(new Date());
                     tbImage.setUpdateTime(new Date());
@@ -148,8 +152,15 @@ public class GoodsServiceImpl implements GoodsService {
      * 修改
      */
     @Override
-    public void update(TbGoods goods) {
-        goodsMapper.updateByPrimaryKey(goods);
+    public void update(Goods goods) {
+        TbGoods tbGoods = new TbGoods(goods);
+        if (goods.getContentId() != null) {
+            TbContent tbContent = new TbContent();
+            tbContent.setId(goods.getContentId());
+            tbContent.setContents(goods.getContent());
+            contentMapper.updateByPrimaryKeySelective(tbContent);
+        }
+        goodsMapper.updateByPrimaryKeySelective(tbGoods);
     }
 
     /**
@@ -159,8 +170,35 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public TbGoods findOne(Long id) {
-        return goodsMapper.selectByPrimaryKey(id);
+    public Goods findOne(Long id) {
+
+
+        TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+
+        Goods goods = new Goods(tbGoods);
+
+        //查询图片
+        TbImageExample tie = new TbImageExample();
+        TbImageExample.Criteria criteria = tie.createCriteria();
+        criteria.andKindEqualTo(KIND_SHOP);   //表示查询的是商品图片
+        criteria.andKindIdEqualTo(id);        //商品id
+        List<TbImage> tbImages = imageMapper.selectByExample(tie);//
+
+        goods.setImageList(tbImages);
+        //查询商品描述
+        if (tbGoods.getContentId() != null && tbGoods.getContentId() != 0) {
+            TbContent tbContent = contentMapper.selectByPrimaryKey(tbGoods.getContentId());
+            goods.setContent(tbContent.getContents());
+        }
+
+//        查询商品类型
+        byte typeId = tbGoods.getTypeId();
+        if (typeId != 0) {
+            TbType tbType = typeMapper.selectByPrimaryKey((long) typeId);//TODO 此处是一个设计错误，id 的类型设置有误
+            goods.setType(tbType.getType());
+        }
+
+        return goods;
     }
 
     /**
@@ -175,7 +213,7 @@ public class GoodsServiceImpl implements GoodsService {
 
 
     @Override
-    public PageResult findPage(TbGoods goods, int pageNum, int pageSize) {
+    public Result findPage(TbGoods goods, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
 
         TbGoodsExample example = new TbGoodsExample();
@@ -185,11 +223,25 @@ public class GoodsServiceImpl implements GoodsService {
             if (goods.getName() != null && goods.getName().length() > 0) {
                 criteria.andNameLike("%" + goods.getName() + "%");
             }
-
+            if (goods.getTypeId() != null) {
+                criteria.andTypeIdEqualTo(goods.getTypeId());
+            }
+            if (goods.getStatus() != null) {
+                criteria.andStatusEqualTo(goods.getStatus());
+            }
         }
 
         Page<TbGoods> page = (Page<TbGoods>) goodsMapper.selectByExample(example);
-        return new PageResult(page.getTotal(), page.getResult());
+
+//        此处 查询商品详情
+        List<TbGoods> result = page.getResult();
+        List<Goods> goodsList = new ArrayList<>();
+        for (TbGoods tbGoods : result) {
+            Goods one = findOne(tbGoods.getId());
+            goodsList.add(one);
+        }
+        PageResult pageResult = new PageResult(page.getTotal(), goodsList);
+        return new Result(true, "访问成功", pageResult);
     }
 
 }

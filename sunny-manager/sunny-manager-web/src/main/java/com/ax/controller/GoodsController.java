@@ -11,6 +11,7 @@ import com.ax.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,15 +41,15 @@ public class GoodsController {
 
 
     /**
-     * 返回全部列表
+     * 返回全部列表  暂时不开放该接口
      *
      * @return
      */
-    @RequestMapping("/findPage")
-    @ResponseBody
-    public PageResult findPage(int page, int rows) {
-        return goodsService.findPage(page, rows);
-    }
+//    @RequestMapping("/findPage")
+//    @ResponseBody
+//    public Result findPage(int page, int rows) {
+//        return goodsService.findPage(page, rows);
+//    }
 
     /**
      * 增加
@@ -62,7 +63,7 @@ public class GoodsController {
         try {
             if (goods != null) {
                 TbUser user = (TbUser) request.getSession().getAttribute("user");
-                goodsService.add(goods,user);
+                goodsService.add(goods, user);
                 return new Result(true, "增加成功");
             }
         } catch (Exception e) {
@@ -79,7 +80,7 @@ public class GoodsController {
      */
     @RequestMapping("/update")
     @ResponseBody
-    public Result update(TbGoods goods) {
+    public Result update(Goods goods) {
         try {
             goodsService.update(goods);
             return new Result(true, "修改成功");
@@ -97,8 +98,17 @@ public class GoodsController {
      */
     @RequestMapping("/findOne")
     @ResponseBody
-    public TbGoods findOne(Long id) {
-        return goodsService.findOne(id);
+    public Result findOne(Long id) {
+        Result result = null;
+        try {
+            Goods one = goodsService.findOne(id);
+            result = new Result(true, "查询成功", one);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "查询失败:异常");
+        }
+
+        return result;
     }
 
     /**
@@ -123,14 +133,21 @@ public class GoodsController {
      * 查询+分页
      *
      * @param goods
-     * @param page
-     * @param rows
+     * @param psgeNum
+     * @param pageSize
      * @return
      */
     @RequestMapping("/search")
     @ResponseBody
-    public PageResult search(TbGoods goods, int page, int rows) {
-        return goodsService.findPage(goods, page, rows);
+    public Result search(TbGoods goods, @RequestParam(defaultValue = "1") int psgeNum, @RequestParam(defaultValue = "10") int pageSize) {
+       Result result = null;
+       try {
+           result =  goodsService.findPage(goods, psgeNum, pageSize);
+       }catch (Exception e){
+           e.printStackTrace();
+           result = new Result(false,"查询失败:异常");
+       }
+       return result;
     }
 
 }
