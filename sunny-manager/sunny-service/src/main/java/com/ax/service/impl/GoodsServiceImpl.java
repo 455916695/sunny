@@ -171,33 +171,26 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Goods findOne(Long id) {
-
-
         TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
-
         Goods goods = new Goods(tbGoods);
-
         //查询图片
         TbImageExample tie = new TbImageExample();
         TbImageExample.Criteria criteria = tie.createCriteria();
         criteria.andKindEqualTo(KIND_SHOP);   //表示查询的是商品图片
         criteria.andKindIdEqualTo(id);        //商品id
         List<TbImage> tbImages = imageMapper.selectByExample(tie);//
-
         goods.setImageList(tbImages);
         //查询商品描述
         if (tbGoods.getContentId() != null && tbGoods.getContentId() != 0) {
             TbContent tbContent = contentMapper.selectByPrimaryKey(tbGoods.getContentId());
             goods.setContent(tbContent.getContents());
         }
-
 //        查询商品类型
         byte typeId = tbGoods.getTypeId();
         if (typeId != 0) {
             TbType tbType = typeMapper.selectByPrimaryKey((long) typeId);//TODO 此处是一个设计错误，id 的类型设置有误
             goods.setType(tbType.getType());
         }
-
         return goods;
     }
 

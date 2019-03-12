@@ -2,6 +2,7 @@ package com.ax.controller;
 
 import java.util.List;
 
+import com.ax.entity.Comment;
 import com.ax.entity.PageResult;
 import com.ax.entity.Result;
 import com.ax.pojo.TbComment;
@@ -9,6 +10,7 @@ import com.ax.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -54,7 +56,7 @@ public class CommentController {
      */
     @RequestMapping("/add")
     @ResponseBody
-    public Result add(TbComment comment) {
+    public Result add(Comment comment) {
         try {
             commentService.add(comment);
             return new Result(true, "增加成功");
@@ -72,7 +74,7 @@ public class CommentController {
      */
     @RequestMapping("/update")
     @ResponseBody
-    public Result update(TbComment comment) {
+    public Result update(Comment comment) {
         try {
             commentService.update(comment);
             return new Result(true, "修改成功");
@@ -90,8 +92,16 @@ public class CommentController {
      */
     @RequestMapping("/findOne")
     @ResponseBody
-    public TbComment findOne(Long id) {
-        return commentService.findOne(id);
+    public Result findOne(Long id) {
+
+        Result result = null;
+        try {
+            List list = commentService.findOne(id);
+            result = new Result(true, "查询成功", list);
+        } catch (Exception e) {
+            result = new Result(false, "查询失败");
+        }
+        return result;
     }
 
     /**
@@ -116,14 +126,22 @@ public class CommentController {
      * 查询+分页
      *
      * @param comment
-     * @param page
-     * @param rows
+     * @param pageNum
+     * @param pageSize
      * @return
      */
     @RequestMapping("/search")
     @ResponseBody
-    public PageResult search(TbComment comment, int page, int rows) {
-        return commentService.findPage(comment, page, rows);
+    public Result search(TbComment comment, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
+        Result result = null;
+        try {
+            result = commentService.findPage(comment, pageNum, pageSize);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "查询失败:异常");
+        }
+
+        return result;
     }
 
 }
