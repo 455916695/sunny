@@ -2,6 +2,7 @@ package com.ax.service;
 import java.util.List;
 
 import com.ax.entity.PageResult;
+import com.ax.entity.Result;
 import com.ax.pojo.TbCart;
 
 /**
@@ -42,7 +43,7 @@ public interface CartService {
 	 * @param id
 	 * @return
 	 */
-	public TbCart findOne(Long id);
+	public Result findOne(Long id);
 	
 	
 	/**
@@ -57,6 +58,6 @@ public interface CartService {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	public PageResult findPage(TbCart cart, int pageNum, int pageSize);
+	public Result findPage(TbCart cart, int pageNum, int pageSize);
 	
 }

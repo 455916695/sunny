@@ -9,6 +9,7 @@ import com.ax.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -90,8 +91,14 @@ public class CartController {
      */
     @RequestMapping("/findOne")
     @ResponseBody
-    public TbCart findOne(Long id) {
-        return cartService.findOne(id);
+    public Result findOne(Long id) {
+        Result result = null;
+        try {
+            result = cartService.findOne(id);
+        } catch (Exception e) {
+            result = new Result(false, "查询失败:异常");
+        }
+        return result;
     }
 
     /**
@@ -116,14 +123,21 @@ public class CartController {
      * 查询+分页
      *
      * @param cart
-     * @param page
-     * @param rows
+     * @param pageNum
+     * @param pageSize
      * @return
      */
     @RequestMapping("/search")
     @ResponseBody
-    public PageResult search(TbCart cart, int page, int rows) {
-        return cartService.findPage(cart, page, rows);
+    public Result search(TbCart cart, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
+
+        Result result = null;
+        try {
+            result = cartService.findPage(cart, pageNum, pageSize);
+        } catch (Exception e) {
+            result = new Result(false, "查询失败:异常");
+        }
+        return result;
     }
 
 }
