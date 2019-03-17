@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
@@ -23,22 +23,22 @@
 	</bean>
 
 	<!-- 配置拦截器 -->
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<!-- 拦截所有mvc控制器 -->
-			<mvc:mapping path="/**"/>
-			<!-- mvc:exclude-mapping是另外一种拦截，它可以在你后来的测试中对某个页面进行不拦截，这样就不用在
-				LoginInterceptor的preHandler方法里面获取不拦截的请求uri地址了(优选) -->
-			<mvc:exclude-mapping path="/user/login" />
-			<mvc:exclude-mapping path="/user/register" />
-			<mvc:exclude-mapping path="/verify" />
-			<bean class="com.ax.interceptor.LoginInterceptor"></bean>
-		</mvc:interceptor>
-	</mvc:interceptors>
+	<!--<mvc:interceptors>-->
+		<!--<mvc:interceptor>-->
+			<!--&lt;!&ndash; 拦截所有mvc控制器 &ndash;&gt;-->
+			<!--<mvc:mapping path="/**"/>-->
+			<!--&lt;!&ndash; mvc:exclude-mapping是另外一种拦截，它可以在你后来的测试中对某个页面进行不拦截，这样就不用在-->
+				<!--LoginInterceptor的preHandler方法里面获取不拦截的请求uri地址了(优选) &ndash;&gt;-->
+			<!--<mvc:exclude-mapping path="/user/login" />-->
+			<!--<mvc:exclude-mapping path="/user/register" />-->
+			<!--<mvc:exclude-mapping path="/verify" />-->
+			<!--<bean class="com.ax.interceptor.LoginInterceptor"></bean>-->
+		<!--</mvc:interceptor>-->
+	<!--</mvc:interceptors>-->
 
 	<!--<bean-->
-		<!--class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
-		<!--<property name="prefix" value="/WEB-INF/jsp/" />-->
-		<!--<property name="suffix" value=".jsp" />-->
+	<!--class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+	<!--<property name="prefix" value="/WEB-INF/jsp/" />-->
+	<!--<property name="suffix" value=".jsp" />-->
 	<!--</bean>-->
 </beans>

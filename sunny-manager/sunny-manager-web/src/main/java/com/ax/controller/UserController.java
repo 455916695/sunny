@@ -3,6 +3,7 @@ package com.ax.controller;
 import java.util.List;
 
 import com.ax.entity.PageResult;
+
 import com.ax.entity.Result;
 import com.ax.pojo.TbUser;
 import com.ax.service.UserService;
@@ -30,13 +31,13 @@ public class UserController {
 
 
     //TODO 校验验证码功能,暂时未完成
-    @RequestMapping("check")
+    @RequestMapping("/check")
     @ResponseBody
     public Result check(String verify, HttpServletRequest request) {
         Result result = null;
         try {
             String verifyCode = (String) request.getSession().getAttribute("verifyCode");
-            if (!StringUtils.isEmpty(verify) && StringUtils.isEmpty(verifyCode)) {
+            if (!StringUtils.isEmpty(verify) && !StringUtils.isEmpty(verifyCode)) {
                 verify = verify.toLowerCase();
                 verifyCode = verifyCode.toLowerCase();
                 if (verify.equals(verifyCode)) {
@@ -59,10 +60,11 @@ public class UserController {
      */
     @RequestMapping("/login")
     @ResponseBody
-    public Result login(TbUser user, HttpServletRequest request,String verify) {
+    public Result login(TbUser user, HttpServletRequest request, String verify) {
         Result result = null;
         try {
-            check(verify,request); //TODO  此处存在校验
+            // Result check = check(verify, request);//TODO  此处存在校验
+
             result = userService.login(user);
         } catch (Exception e) {
             e.printStackTrace();
