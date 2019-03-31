@@ -12,6 +12,7 @@ import com.ax.mapper.TbGoodsMapper;
 import com.ax.mapper.TbImageMapper;
 import com.ax.mapper.TbTypeMapper;
 import com.ax.pojo.*;
+import com.ax.pojogroup.NewGoods;
 import com.ax.service.GoodsService;
 import com.ax.util.IdWorker;
 import com.github.pagehelper.Page;
@@ -35,7 +36,7 @@ public class GoodsServiceImpl implements GoodsService {
     private static final byte DEFAULT_DEGREE = 0;  //0 表示默认新旧程度
     private static final byte DEFAULT_MEANS = 0;  //0 表示默认销售方式
     private static final int KIND_SHOP = 2;  //图片种类 1 用户头像  2 商品图片
-    private static final int NORMAL_GOODS_STATUS = 1;  //1 正常状态
+    private static final int NORMAL_GOODS_STATUS = 1;  //1.正常状态  2.被加入购物车  3.已售出
     private static final int NORMAL_IMAGE_STATUS = 1;  //状态  1 正常  2 删除
     private static final int DEFAULT_NUMBER = 1;  //1 默认数量为1
     private static final int DEFAULT_PRICE = 0;  //1 默认数量为1
@@ -76,10 +77,8 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public void add(Goods goods, TbUser user) throws Exception {
-//        IdWorker idWorker = new IdWorker();
         //添加商品id
         TbGoods tbGoods = new TbGoods();
-//        tbGoods.setId(idWorker.nextId());   //自增长
         if (goods != null) { //TODO 此处需要校验，什么样的商品算空
             if (!StringUtils.isEmpty(goods.getName())) {//设置商品名称
                 tbGoods.setName(goods.getName());
@@ -235,6 +234,97 @@ public class GoodsServiceImpl implements GoodsService {
         }
         PageResult pageResult = new PageResult(page.getTotal(), goodsList);
         return new Result(true, "访问成功", pageResult);
+    }
+
+
+    //===============我神奇的分界线======================================================================================================
+
+    /**
+     * 添加商品
+     */
+    public TbGoods addGoods(TbGoods goods) {
+        if (goods != null) {
+
+            if (goods.getNumber() == null) goods.setNumber(DEFAULT_NUMBER);  //设置默认数量
+            goods.setStatus(NORMAL_GOODS_STATUS);                             //设置状态
+            goods.setCreateTime(new Date());                                   //设置创建时间
+            goods.setUpdateTime(new Date());                                   //设置更新时间
+
+            goodsMapper.insert(goods);
+
+            return goods;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 查询指定商品信息
+     */
+    @Override
+    public TbGoods findOneTbGoods(Long id) {
+
+        TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+
+        return tbGoods;
+    }
+
+    /**
+     * 查询全部商品信息
+     */
+    @Override
+    public List<TbGoods> findAllTbGoods() {
+
+        List<TbGoods> tbGoods = goodsMapper.selectByExample(null); //其实这里可以考虑改一下
+
+        return tbGoods;
+    }
+
+    /**
+     * 分页查询商品
+     */
+    @Override
+    public PageResult findPageTbGoods(int pageNum, int pageSize) {
+
+        PageHelper.startPage(pageNum, pageSize);  //设置分页
+
+        Page<TbGoods> page = (Page<TbGoods>) goodsMapper.selectByExample(null); //查询分页数据
+
+        return new PageResult(page.getTotal(), page.getResult());  //返回分页结果
+    }
+
+    /**
+     * 条件分页查询商品
+     */
+    @Override
+    public PageResult search(TbGoods tbGoods, int pageNum, int pageSize) {
+
+        PageHelper.startPage(pageNum, pageSize);
+
+//        name                  // 商品名称
+//          Long sellerId;       //卖家id
+//          Byte typeId;        //商品类型
+//          Integer price;      //商品价格
+//          Byte oldDegree;     //商品新旧程度
+
+        TbGoodsExample tge = new TbGoodsExample();
+        TbGoodsExample.Criteria criteria = tge.createCriteria();
+
+        if (!StringUtils.isEmpty(tbGoods.getName())) criteria.andNameLike("%" + tbGoods.getName() + "%");
+
+        if (tbGoods.getSellerId() != null) criteria.andSellerIdEqualTo(tbGoods.getSellerId());
+
+        if (tbGoods.getTypeId() != null) criteria.andTypeIdEqualTo(tbGoods.getTypeId());
+
+        if (tbGoods.getPrice() != null) criteria.andPriceBetween(0, tbGoods.getPrice());
+
+        if (tbGoods.getOldDegree() != null) criteria.andOldDegreeEqualTo(tbGoods.getOldDegree());
+
+        if (tbGoods.getStatus() != null) criteria.andStatusEqualTo(tbGoods.getStatus());
+
+        Page<TbGoods> page = (Page<TbGoods>) goodsMapper.selectByExample(tge); //查询分页数据
+
+        return new PageResult(page.getTotal(), page.getResult());  //返回分页结果
     }
 
 }

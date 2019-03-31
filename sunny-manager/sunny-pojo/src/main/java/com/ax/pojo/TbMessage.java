@@ -17,6 +17,8 @@ public class TbMessage {
 
     private Date updateTime;
 
+    private Long goodsId;
+
     public Long getId() {
         return id;
     }
@@ -71,5 +73,13 @@ public class TbMessage {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Long getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(Long goodsId) {
+        this.goodsId = goodsId;
     }
 }

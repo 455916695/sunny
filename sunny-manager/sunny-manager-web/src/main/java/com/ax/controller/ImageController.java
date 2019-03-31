@@ -197,4 +197,42 @@ public class ImageController {
         return imageService.findPage(image, page, rows);
     }
 
+
+    /**
+     * 上传图片地址
+     */
+    @RequestMapping("/addImageAddress")
+    @ResponseBody
+    public Result addImageAddress(String address, Long id, Integer kind) {
+        Result result = null;
+        try {
+            imageService.addImage(address, id, kind);
+            result = new Result(true, "添加成功");
+        } catch (Exception e) {
+            result = new Result(false, "添加失败:" + e.getMessage());
+        }
+        return result;
+    }
+
+
+    /**
+     * 查询指定图片地址
+     */
+    @RequestMapping("/findImageAddress")
+    @ResponseBody
+    public Result findImageAddress(TbImage image) {
+//        private Integer kind;
+//        private Long kindId;
+        Result result = null;
+        try {
+            TbImage img = imageService.findImageAddress(image);
+            result = new Result(true, "查询成功", img);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "查询失败" + e.getMessage());
+        }
+        return result;
+    }
+
+
 }

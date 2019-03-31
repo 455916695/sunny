@@ -28,4 +28,9 @@ public interface TbMessageMapper {
     int updateByPrimaryKeySelective(TbMessage record);
 
     int updateByPrimaryKey(TbMessage record);
+
+    /**
+     * 查询最新消息
+     */
+    List<TbMessage> findNewMessage(@Param("reId") Long reId);
 }

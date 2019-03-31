@@ -28,4 +28,9 @@ public interface TbTypeMapper {
     int updateByPrimaryKeySelective(TbType record);
 
     int updateByPrimaryKey(TbType record);
+
+    /**
+     * 根据子类id 查询 父级 类型
+     * */
+    TbType selectParentType(@Param("id") Long id);
 }

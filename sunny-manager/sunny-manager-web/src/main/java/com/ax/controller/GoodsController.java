@@ -1,13 +1,14 @@
 package com.ax.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ax.entity.Goods;
 import com.ax.entity.PageResult;
+import com.ax.pojo.*;
+import com.ax.pojogroup.NewGoods;
 import com.ax.entity.Result;
-import com.ax.pojo.TbGoods;
-import com.ax.pojo.TbUser;
-import com.ax.service.GoodsService;
+import com.ax.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,18 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
+    @Autowired
+    private ContentService contentService;  //评论service
+
+    @Autowired
+    private ImageService imageService; //图片 image
+
+    @Autowired
+    private TypeService typeService;  //分类查询
+
+    @Autowired
+    private OrderService orderService; //查询订单
+
     /**
      * 返回全部列表
      *
@@ -38,18 +51,6 @@ public class GoodsController {
     public List<TbGoods> findAll() {
         return goodsService.findAll();
     }
-
-
-    /**
-     * 返回全部列表  暂时不开放该接口
-     *
-     * @return
-     */
-//    @RequestMapping("/findPage")
-//    @ResponseBody
-//    public Result findPage(int page, int rows) {
-//        return goodsService.findPage(page, rows);
-//    }
 
     /**
      * 增加
@@ -140,14 +141,166 @@ public class GoodsController {
     @RequestMapping("/search")
     @ResponseBody
     public Result search(TbGoods goods, @RequestParam(defaultValue = "1") int psgeNum, @RequestParam(defaultValue = "10") int pageSize) {
-       Result result = null;
-       try {
-           result =  goodsService.findPage(goods, psgeNum, pageSize);
-       }catch (Exception e){
-           e.printStackTrace();
-           result = new Result(false,"查询失败:异常");
-       }
-       return result;
+        Result result = null;
+        try {
+            result = goodsService.findPage(goods, psgeNum, pageSize);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "查询失败:异常");
+        }
+        return result;
     }
+
+
+    //=====分界线================我是神奇的分界线===================================================================================================
+    @RequestMapping("/addGoods")
+    @ResponseBody
+    public Result addGoods(NewGoods goods,String address) {
+
+        Result result = null;
+        try {   // 缺点：无法保证事务的完整性
+            TbContent add = contentService.add(goods.getContent());  //如果添加成功，返回描述的id
+            goods.getGoods().setContentId(add.getId());
+            TbGoods tbGoods = goodsService.addGoods(goods.getGoods());
+//            imageService.addImageList(goods.getImageList(), tbGoods.getId());
+            imageService.addImage(address,tbGoods.getId(),2); //添加商品图片
+
+            result = new Result(true, "添加成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "添加失败");
+        }
+        return result;
+    }
+
+    /**
+     * 查询指定商品
+     */
+    @RequestMapping("/findGoodsById")
+    @ResponseBody
+    public Result findGoodsById(Long id) {
+        Result result = null;
+        NewGoods goods = null;
+        try {
+//              TbGoods goods;
+//              TbType type;          //暂时没有写，如果需要可以在这里添加
+//              TbContent content;
+//              List<TbImage> imageList;
+            goods = new NewGoods();      //创建组合实体
+            // 查询商品本身
+            TbGoods tbGoods = goodsService.findOneTbGoods(id);  //查询商品信息
+            TbContent content = contentService.findOne(tbGoods.getContentId());  //查询 详情信息
+            List<TbImage> imagesList = imageService.findByKindId(tbGoods.getId()); //查询 商品图片
+
+            goods.setGoods(tbGoods);
+            goods.setContent(content);
+            goods.setImageList(imagesList);
+
+            result = new Result(true, "商品查询成功", goods);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "商品查询失败：系统异常");
+        }
+
+        return result;
+    }
+
+    /**
+     * 粗略查询全部商品信息(问题是否需要带图片)
+     */
+    @RequestMapping("/findAllTbGoods")
+    @ResponseBody
+    public Result findAllTbGoods() {
+        Result result = null;
+        try {
+            List<TbGoods> allTbGoods = goodsService.findAllTbGoods();
+            result = new Result(true, "查询成功", allTbGoods);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "查询失败：系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 条件分页查询
+     */
+    @RequestMapping("/newSearch")
+    @ResponseBody
+    public Result newSearch(TbGoods goods, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
+        Result result = null;
+        try {
+            //此处存在着大片的处理
+            //创建相应的对象
+            List<NewGoods> list = new ArrayList<>();   //创建结果 集合
+
+            PageResult search = goodsService.search(goods, pageNum, pageSize);  //查询商品信息
+
+            List<TbGoods> rows = search.getRows();    //遍历商品，并丰富其他信息
+            if (search.getRows() != null)
+                for (TbGoods tbGoods : rows) {
+
+                    NewGoods newGoods = new NewGoods();
+                    //查询图片                //这里假设他们只查询 商品基本信息和商品图片
+                    List<TbImage> imagesList = imageService.findByKindId(tbGoods.getId());
+
+                    newGoods.setGoods(tbGoods);
+                    newGoods.setImageList(imagesList);
+
+                    list.add(newGoods);
+                }
+
+            search.setRows(list);
+            result = new Result(true, "查询成功", search);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "查询失败:系统异常");
+        }
+        return result;
+    }
+
+
+    /**
+     * 查询 已经购买的商品
+     * <p>
+     * *
+     */
+    @RequestMapping("/findBoughtGoods")
+    @ResponseBody
+    public Result findBoughtGoods(Long buyerId) {
+        Result result = null;
+        try {
+            //同过用户查询订单，通过订单里的商品信息，查询商品信息返回
+            List<TbOrder> orders = orderService.findOrderByBuyerId(buyerId);  //查询订单
+
+            List<NewGoods> goodsList = new ArrayList();
+
+            if (orders != null && orders.size() > 0)
+                for (TbOrder order : orders) {
+
+                    NewGoods newGoods = new NewGoods();
+
+                    TbGoods oneTbGoods = goodsService.findOneTbGoods(order.getGoodsId());
+                    List<TbImage> byKindId = imageService.findByKindId(oneTbGoods.getId());
+
+                    newGoods.setGoods(oneTbGoods);
+                    newGoods.setImageList(byKindId);
+
+                    goodsList.add(newGoods);
+                }
+
+            result = new Result(true, "查询成功", goodsList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "查询失败:系统异常" + e.getMessage());
+        }
+        return result;
+    }
+
+
+    /**
+     * 更新问题：留到明天解决
+     * */
+
 
 }

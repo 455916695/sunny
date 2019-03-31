@@ -23,7 +23,7 @@ public class TbGoods {
 
     private Byte means;
 
-    private Integer status;
+    private Integer status;   //1.正常状态  2.被加入购物车  3.已售出
 
     private Date createTime;
 

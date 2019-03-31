@@ -23,7 +23,7 @@ public class TbOrder {
 
     private Date updateTime;
 
-    private Byte status;
+    private Byte status;  //订单状态  1 未支付  2 已支付  3 取消订单 4完成
 
     public Long getId() {
         return id;

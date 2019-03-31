@@ -71,4 +71,21 @@ public interface OrderService {
      * 分页查询，订单管理
      */
     Result findPage(int pageNum, int pageSize, TbUser user, TbOrder order);
+
+//=====我是神奇的分界线======================================================================================================
+
+    /**
+     * 添加订单
+     */
+    public void addOrder(TbOrder order);
+
+    /**
+     * 条件分页查询
+     */
+    public PageResult  newSearch(TbOrder order, int pageNum, int pageSize);
+
+    /**
+     *  根据买家id 查询订单
+     * */
+    List<TbOrder> findOrderByBuyerId(Long buyerId);
 }

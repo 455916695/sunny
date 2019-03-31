@@ -29,7 +29,7 @@ public interface ContentService {
 	/**
 	 * 增加
 	*/
-	public void add(TbContent content);
+	public TbContent add(TbContent content);
 	
 	
 	/**

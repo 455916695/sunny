@@ -1,15 +1,17 @@
 package com.ax.service.impl;
 
 import com.ax.entity.Result;
+import com.ax.pojo.TbImageExample;
+import com.ax.pojogroup.Type;
 import com.ax.mapper.TbTypeMapper;
 import com.ax.pojo.TbType;
 import com.ax.pojo.TbTypeExample;
 import com.ax.service.TypeService;
-import com.ax.util.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,17 +27,17 @@ public class TypeServiceImpl implements TypeService {
      * 查询分类
      */
     @Override
-    public List<TbType> findType(TbType tbType) {
+    public List<TbType> findType(Long parentId) {
 
         List<TbType> tbTypes = null;
 
         TbTypeExample tbTypeExample = new TbTypeExample();
         TbTypeExample.Criteria criteria = tbTypeExample.createCriteria();
 
-        if (tbType == null || tbType.getParentId() == null) {
+        if (parentId == null) {
             criteria.andParentIdEqualTo(DEFAULT_PARENT_ID);   // 默认查询
         } else {
-            criteria.andParentIdEqualTo(tbType.getParentId());  //指定查询
+            criteria.andParentIdEqualTo(parentId);  //指定查询
         }
 
         tbTypes = typeMapper.selectByExample(tbTypeExample);
@@ -51,7 +53,6 @@ public class TypeServiceImpl implements TypeService {
 
         Result result = null;
         if (tbType != null && !StringUtils.isEmpty(tbType.getType())) {
-//            tbType.setId(new IdWorker().nextId());   //自增长
             if (tbType.getParentId() == null) tbType.setParentId(DEFAULT_PARENT_ID);
             typeMapper.insert(tbType);
             result = new Result(true, "增加成功");
@@ -71,5 +72,35 @@ public class TypeServiceImpl implements TypeService {
     @Override
     public Result update(TbType tbType) { //TODO 暂时不开发
         return null;
+    }
+
+
+    /**
+     * 查询全部类型
+     */
+    public List<Type> findAll() {
+
+        TbTypeExample tte = new TbTypeExample();
+        TbTypeExample.Criteria criteria = tte.createCriteria();
+        criteria.andParentIdEqualTo(0L); //查询所有 父类id 为0 的type
+
+        List<TbType> list = typeMapper.selectByExample(tte);
+
+        List<Type> resultList = new ArrayList<Type>();
+        for (TbType tbType : list) {
+            Type type = new Type();
+            type.setTbType(tbType);
+            type.setTbTypeList(findType(tbType.getId())); //查询相关子类型
+            resultList.add(type);
+        }
+        return resultList;
+    }
+
+
+    public TbType findParentType(Long id) {
+
+        TbType type = typeMapper.selectParentType(id);
+
+        return type;
     }
 }

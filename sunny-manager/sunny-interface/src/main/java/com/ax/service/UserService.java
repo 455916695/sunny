@@ -45,7 +45,7 @@ public interface UserService {
     /**
      * 修改
      */
-    public void update(TbUser user);
+    public Result update(TbUser user);
 
 
     /**
@@ -54,7 +54,7 @@ public interface UserService {
      * @param id
      * @return
      */
-    public Result findOne(Long id);
+    public TbUser findOne(Long id);
 
 
     /**

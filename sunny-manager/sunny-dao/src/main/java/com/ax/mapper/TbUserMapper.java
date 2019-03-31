@@ -28,4 +28,9 @@ public interface TbUserMapper {
     int updateByPrimaryKeySelective(TbUser record);
 
     int updateByPrimaryKey(TbUser record);
+
+    /**
+     *  根据用户名 查询用户id
+     * */
+    TbUser selectIdByName(String username);
 }

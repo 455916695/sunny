@@ -1,6 +1,7 @@
 package com.ax.controller;
 
 import com.ax.entity.Result;
+import com.ax.pojogroup.Type;
 import com.ax.pojo.TbType;
 import com.ax.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class TypeController {
     public Result findType(TbType tbType) {
         Result result = null;
         try {
-            List<TbType> type = typeService.findType(tbType);
+            List<TbType> type = typeService.findType(tbType.getParentId());
             result = new Result(true, "查询成功", type);
         } catch (Exception e) {
             result = new Result(false, "查询失败:异常");
@@ -43,4 +44,36 @@ public class TypeController {
         return result;
     }
 
+
+    @RequestMapping("/findAll")
+    @ResponseBody
+    public Result findAll() {
+        Result result = null;
+        try {
+            List<Type> all = typeService.findAll();
+            result = new Result(true, "查询成功", all);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "查询失败");
+        }
+        return result;
+    }
+
+
+    /**
+     * 根据之类id 查询父级 Type
+     */
+    @RequestMapping("/findParentType")
+    @ResponseBody
+    public Result findParentType(Long id) {
+        Result result = null;
+        try {
+            TbType type = typeService.findParentType(id);
+            result = new Result(true, "查询成功", type);
+        } catch (Exception e) {
+            result = new Result(false, "查询失败" + e.getMessage());
+        }
+
+        return result;
+    }
 }

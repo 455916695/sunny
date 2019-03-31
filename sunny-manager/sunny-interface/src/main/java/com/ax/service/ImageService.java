@@ -62,4 +62,24 @@ public interface ImageService {
 	public PageResult findPage(TbImage image, int pageNum, int pageSize);
 
 	File upload(String servicePath,String originalFilename, int kind, TbUser user);
+
+//==================================================================================================================
+	/**
+	 * 添加商品图片信息
+	 * @param imageList 图片集合
+	 * @param id  商品
+	 * */
+	void addImageList(List<TbImage> imageList, Long id);
+
+	List<TbImage> findByKindId(Long id);
+
+	/**
+	 * 添加商品图片
+	 * */
+    void addImage(String address, Long id,Integer kind);
+
+    /**
+	 * 查询图片
+	 * */
+    TbImage findImageAddress(TbImage image);
 }

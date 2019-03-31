@@ -47,8 +47,9 @@ public class ContentServiceImpl implements ContentService {
      * 增加
      */
     @Override
-    public void add(TbContent content) {
+    public TbContent add(TbContent content) {
         contentMapper.insert(content);
+        return content;
     }
 
 

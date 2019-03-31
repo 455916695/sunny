@@ -140,7 +140,6 @@ public class CommentController {
             e.printStackTrace();
             result = new Result(false, "查询失败:异常");
         }
-
         return result;
     }
 

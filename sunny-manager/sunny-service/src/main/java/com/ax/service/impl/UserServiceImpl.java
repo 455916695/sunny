@@ -30,7 +30,6 @@ import org.springframework.util.StringUtils;
 @Service
 public class UserServiceImpl implements UserService {
 
-
     private static final int DEFAULT_VALUE = 0; //0 默认参数值,及无指定参数
 
     private static final int IMAGE_KIND = 1; //1 表示头像类型
@@ -95,9 +94,8 @@ public class UserServiceImpl implements UserService {
             if (tbUsers != null && tbUsers.size() > 0) {
                 result = new Result(false, "注册失败:用户已存在");
             } else {
-//                user.setId(new IdWorker().nextId());   //自增长
                 user.setPassword(MD5Utils.md5(user.getPassword()));
-                value(user);
+                value(user);   //给 user 对象 赋默认值
                 userMapper.insert(user);
                 result = new Result(true, "注册成功");
             }
@@ -178,9 +176,22 @@ public class UserServiceImpl implements UserService {
      * 修改
      */
     @Override
-    public void update(TbUser user) {
-        user.setUpdateTime(new Date());
-        userMapper.updateByPrimaryKeySelective(user);
+    public Result update(TbUser user) {
+        Result result = null;
+        if (user != null || user.getId() == null) {
+            if (!StringUtils.isEmpty(user.getUsername())) {
+                TbUser old = userMapper.selectIdByName(user.getUsername());
+                if (old != null && old.getId() != null) {
+                    return new Result(false, "更新失败:用户名已存在");
+                }
+            }
+            user.setUpdateTime(new Date());
+            userMapper.updateByPrimaryKeySelective(user);
+            result = new Result(true, "更新成功", user);
+        } else {
+            result = new Result(false, "更新失败：用户参数为null");
+        }
+        return result;
     }
 
     /**
@@ -190,18 +201,12 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public Result findOne(Long id) {
+    public TbUser findOne(Long id) {
 
-        Result result = null;
-        if (id != null && id != DEFAULT_VALUE) {
-            TbUser tbUser = userMapper.selectByPrimaryKey(id);
-            tbUser.setPassword("");   //TODO 此处存在需要修改的地方,抹去指定不需要展示给用户的数据
-            result = new Result(true, "查询成功", tbUser);
-        } else {
-            result = new Result(false, "查询失败:系统异常");
-        }
+        TbUser tbUser = userMapper.selectByPrimaryKey(id);
+        tbUser.setPassword("");   //TODO 此处存在需要修改的地方,抹去指定不需要展示给用户的数据
 
-        return result;
+        return tbUser;
     }
 
     /**
@@ -218,10 +223,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageResult findPage(TbUser user, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-
         TbUserExample example = new TbUserExample();
         TbUserExample.Criteria criteria = example.createCriteria();
-
         if (user != null) {
             if (user.getName() != null && user.getName().length() > 0) {
                 criteria.andNameLike("%" + user.getName() + "%");
@@ -241,9 +244,7 @@ public class UserServiceImpl implements UserService {
             if (user.getSchool() != null && user.getSchool().length() > 0) {
                 criteria.andSchoolLike("%" + user.getSchool() + "%");
             }
-
         }
-
         Page<TbUser> page = (Page<TbUser>) userMapper.selectByExample(example);
         return new PageResult(page.getTotal(), page.getResult());
     }

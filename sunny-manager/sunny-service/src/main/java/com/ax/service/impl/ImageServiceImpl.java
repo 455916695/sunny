@@ -3,6 +3,7 @@ package com.ax.service.impl;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 
 import com.ax.entity.PageResult;
 import com.ax.mapper.TbImageMapper;
@@ -60,13 +61,20 @@ public class ImageServiceImpl implements ImageService {
         imageMapper.insert(image);
     }
 
-
     /**
      * 修改
      */
     @Override
     public void update(TbImage image) {
-        imageMapper.updateByPrimaryKey(image);
+        String address = image.getAddress();
+        if (!StringUtils.isEmpty(address)) {
+            String[] images = address.split("images");
+            address = images[images.length - 1];
+            image.setAddress(address);
+        }
+
+        image.setUpdateTime(new Date());
+        imageMapper.updateByPrimaryKeySelective(image);
     }
 
     /**
@@ -139,5 +147,77 @@ public class ImageServiceImpl implements ImageService {
         file = new File(path.toString());
         return file;
     }
+
+
+// ========我是神奇的分界线====================================================================================================
+
+    /**
+     * 添加商品图片
+     *
+     * @param imageList 商品图片集合
+     * @param goodId    商品id
+     */
+    public void addImageList(List<TbImage> imageList, Long goodId) {
+//        private Integer kind;
+//        private Long kindId;
+//        private Integer status;
+//        private Date createTime;
+//        private Date updateTime;
+        ListIterator<TbImage> tbImageListIterator = imageList.listIterator();
+
+        while (tbImageListIterator.hasNext()) {
+            TbImage next = tbImageListIterator.next();
+            next.setKind(2);     //2 表示商品图片
+            next.setKindId(goodId);
+            next.setStatus(STATUS_VALUE_NORMAL);
+            next.setCreateTime(new Date());
+            next.setUpdateTime(new Date());
+
+            imageMapper.insert(next);
+        }
+    }
+
+    @Override
+    public List<TbImage> findByKindId(Long kindId) {
+
+        TbImageExample tie = new TbImageExample();
+        TbImageExample.Criteria criteria = tie.createCriteria();
+
+        criteria.andKindIdEqualTo(kindId);
+
+        List<TbImage> images = imageMapper.selectByExample(tie);
+
+        return images;
+    }
+
+    @Override
+    public void addImage(String address, Long id, Integer kind) {
+        if (!StringUtils.isEmpty(address)) {
+            String[] images = address.split("images");
+            address = images[images.length - 1];
+        }
+
+        //添加商品图片
+        TbImage tbImage = new TbImage();
+        tbImage.setAddress(address);
+        tbImage.setKind(kind);
+        tbImage.setKindId(id);
+        tbImage.setStatus(STATUS_VALUE_NORMAL);
+        tbImage.setCreateTime(new Date());
+        tbImage.setUpdateTime(new Date());
+
+        imageMapper.insert(tbImage);
+    }
+
+    /**
+     * 查询image 地址
+     */
+    public TbImage findImageAddress(TbImage image) {
+
+        TbImage tbImage = imageMapper.selectOneByKindId(image.getKindId());
+
+        return tbImage;
+    }
+
 
 }

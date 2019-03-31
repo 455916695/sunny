@@ -111,6 +111,7 @@
         <include refid="Data_Column_List"/>
         from tb_image
         where kind_id = #{kindId,jdbcType=BIGINT}
+        Limit 1
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

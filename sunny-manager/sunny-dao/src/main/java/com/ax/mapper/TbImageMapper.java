@@ -30,8 +30,8 @@ public interface TbImageMapper {
     int updateByPrimaryKey(TbImage record);
 
     /**
-     *  根据 kindId 查询一张图片
-     *
-     * */
+     * 根据 kindId 查询一张图片
+     */
     TbImage selectOneByKindId(Long kindId);
+
 }

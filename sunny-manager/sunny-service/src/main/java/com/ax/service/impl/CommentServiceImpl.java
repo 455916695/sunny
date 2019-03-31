@@ -175,6 +175,9 @@ public class CommentServiceImpl implements CommentService {
             if (comment.getBuyerId() != null) {
                 criteria.andBuyerIdEqualTo(comment.getBuyerId());
             }
+            if (comment.getGoodsId() != null) {
+                criteria.andBuyerIdEqualTo(comment.getGoodsId());
+            }
         }
         Page<TbComment> page = (Page<TbComment>) commentMapper.selectByExample(example);
 

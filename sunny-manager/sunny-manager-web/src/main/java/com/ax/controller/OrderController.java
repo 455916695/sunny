@@ -1,11 +1,19 @@
 package com.ax.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.ax.entity.Goods;
 import com.ax.entity.PageResult;
 import com.ax.entity.Result;
+import com.ax.pojo.TbGoods;
+import com.ax.pojo.TbImage;
 import com.ax.pojo.TbOrder;
 import com.ax.pojo.TbUser;
+import com.ax.pojogroup.NewGoods;
+import com.ax.pojogroup.Order;
+import com.ax.service.GoodsService;
+import com.ax.service.ImageService;
 import com.ax.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +34,12 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private GoodsService goodsService;
+
+    @Autowired
+    private ImageService imageService;
 
     /**
      * 返回全部订单
@@ -140,15 +154,77 @@ public class OrderController {
      */
     @RequestMapping("/findPage")
     @ResponseBody
-    public Result findPage(TbOrder order, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize, HttpServletRequest request) {
+    public Result findPage(TbOrder order, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
         Result result = null;
         try {
-            TbUser user = (TbUser) request.getSession().getAttribute("user");
-            result = orderService.findPage(pageNum, pageSize, user, order);
+            PageResult pageResult = orderService.findPage(order, pageNum, pageSize);
+            result = new Result(true, "查询成功", pageResult);
         } catch (Exception e) {
             result = new Result(false, "查询失败:异常");
         }
         return result;
     }
+
+//==========================================================================================================
+
+    /**
+     * 添加订单
+     */
+    @RequestMapping("/addOrder")
+    @ResponseBody
+    public Result addOrder(TbOrder order) {
+        Result result = null;
+        try {
+            orderService.addOrder(order);
+            result = new Result(true, "添加成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "添加失败：异常");
+        }
+        return result;
+    }
+
+
+    /**
+     * 条件分页查询
+     */
+    @RequestMapping("/newSearch")
+    @ResponseBody
+    public Result newSearch(TbOrder order, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
+        Result result = null;
+        try {
+            PageResult pageResult = orderService.newSearch(order, pageNum, pageSize);  //查询order本身
+
+            List<Order> list = new ArrayList();  //创建 存放order 的集合
+            List<TbOrder> rows = pageResult.getRows();  // 取出原有的TbOrder
+
+//            循环遍历，封装order
+            if (rows != null)
+                for (TbOrder row : rows) {
+                    Order newOrder = new Order();  //创建 order的组合实体类
+//                      TbOrder order;  //订单本身
+//                      TbUser buyer;   //买家
+//                      TbUser seller;  //卖家
+//                      TbGoods goods;  //商品
+                    NewGoods newGoods = new NewGoods();   //封装商品信息
+                    TbGoods goods = goodsService.findOneTbGoods(row.getGoodsId());
+                    List<TbImage> imageList = imageService.findByKindId(goods.getId());
+                    newGoods.setGoods(goods);
+                    newGoods.setImageList(imageList);
+
+                    newOrder.setOrder(row);           //封装order信息
+                    newOrder.setGoods(newGoods);
+                    list.add(newOrder);   //将数据添加到集合中
+                }
+            pageResult.setRows(list);
+
+            result = new Result(true, "查询成功", pageResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "查询失败:系统异常" + e.getMessage());
+        }
+        return result;
+    }
+
 
 }

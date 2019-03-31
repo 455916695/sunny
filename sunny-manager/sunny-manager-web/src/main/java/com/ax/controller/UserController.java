@@ -10,6 +10,7 @@ import com.ax.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -63,12 +64,9 @@ public class UserController {
     public Result login(TbUser user, HttpServletRequest request, String verify) {
         Result result = null;
         try {
-            // Result check = check(verify, request);//TODO  此处存在校验
-
             result = userService.login(user);
         } catch (Exception e) {
             e.printStackTrace();
-            // 此处需要日志
             result = new Result(false, "登陆失败:系统异常");
         }
         if (result.isFlag()) {
@@ -144,14 +142,18 @@ public class UserController {
      */
     @RequestMapping("/update")
     @ResponseBody
-    public Result update(TbUser user) {
+    public Result update(TbUser user, HttpServletRequest request) {
+        Result result;
         try {
-            userService.update(user);
-            return new Result(true, "修改成功");
+            result = userService.update(user);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false, "修改失败");
+            result = new Result(false, "修改失败");
         }
+        if (result.isFlag() ) {
+            request.getSession().setAttribute("user", result.getData());
+        }
+        return result;
     }
 
     /**
@@ -170,7 +172,8 @@ public class UserController {
                 TbUser user = (TbUser) request.getSession().getAttribute("user");
                 id = user.getId();
             }
-            result = userService.findOne(id);
+            TbUser one = userService.findOne(id);
+            result = new Result(true,"查询成功",one);
         } catch (Exception e) {
             result = new Result(false, "查询失败:系统异常");
         }
@@ -208,5 +211,25 @@ public class UserController {
     public PageResult search(TbUser user, int page, int rows) {
         return userService.findPage(user, page, rows);
     }
+
+    /**
+     * 获取当前登录对象
+     */
+    @RequestMapping("/getLoginUser")
+    @ResponseBody
+    public Result getLoginUser(HttpServletRequest request) {
+
+        Result result;
+        try {
+            TbUser user = (TbUser) request.getSession().getAttribute("user");
+            result = new Result(true, "获取成功", user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "获取失败");
+        }
+
+        return result;
+    }
+
 
 }
