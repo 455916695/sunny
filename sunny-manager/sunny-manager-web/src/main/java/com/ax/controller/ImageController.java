@@ -221,8 +221,6 @@ public class ImageController {
     @RequestMapping("/findImageAddress")
     @ResponseBody
     public Result findImageAddress(TbImage image) {
-//        private Integer kind;
-//        private Long kindId;
         Result result = null;
         try {
             TbImage img = imageService.findImageAddress(image);

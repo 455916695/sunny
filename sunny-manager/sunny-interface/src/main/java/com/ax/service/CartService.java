@@ -59,5 +59,9 @@ public interface CartService {
 	 * @return
 	 */
 	public Result findPage(TbCart cart, int pageNum, int pageSize);
-	
+
+	/**
+	 * 查询指定买家  购物车中是否存在该商品
+	 * */
+	boolean findCountByGoodsId(Long buyerId, Long goodsId);
 }

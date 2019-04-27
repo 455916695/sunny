@@ -227,4 +227,73 @@ public class OrderController {
     }
 
 
+    /**
+     * 订单支付后   状态为2                          //update()
+     */
+    @RequestMapping("/pay")
+    @ResponseBody
+    public Result pay(TbOrder order) {
+        Result result = null;
+        try {
+
+            //查询商品是否还处于未被购买的状态  如果可以购买返回true
+            boolean isCanBuy = goodsService.findGoodsIsCanBuy(order.getGoodsId());
+
+            if (isCanBuy) {
+
+                order.setStatus((byte) 2);
+                orderService.update(order);
+
+                //修改商品状态  2 表示被购买
+                goodsService.updateStatusById(order.getGoodsId(), 2);
+                result = new Result(true, "支付成功");
+
+            } else {
+                result = new Result(false, "该商品已被其他用户抢先付钱了");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "网络异常,请重新支付" + e.getMessage());
+        }
+        return result;
+    }
+
+    /**
+     * 订单发货后   状态为3                                 //update()
+     */
+    @RequestMapping("/sendGoods")
+    @ResponseBody
+    public Result sendGoods(TbOrder order) {
+        Result result = null;
+        try {
+            order.setStatus((byte) 3);
+            orderService.update(order);
+            result = new Result(true, "发货成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "网络异常,请重新支付" + e.getMessage());
+        }
+        return result;
+    }
+
+
+    /**
+     * 订单确认收货   状态为4                                 //update()
+     */
+    @RequestMapping("/gotGoods")
+    @ResponseBody
+    public Result gotGoods(TbOrder order) {
+        Result result = null;
+        try {
+            order.setStatus((byte) 4);
+            orderService.update(order);
+            result = new Result(true, "确认收货");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "系统异常,请重新确认收货" + e.getMessage());
+        }
+        return result;
+    }
+
 }

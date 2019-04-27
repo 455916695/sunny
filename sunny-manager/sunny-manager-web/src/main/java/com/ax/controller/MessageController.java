@@ -69,6 +69,10 @@ public class MessageController {
         Result result = null;
         try {
             List<TbMessage> message = messageService.findMessage(id, otherId, goodsId);
+
+            //修改消息状态 为已阅读
+            messageService.updateMessageStatusForReaded(message, id);
+
             result = new Result(true, "查询成功", message);
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,6 +117,30 @@ public class MessageController {
             result = new Result(true, "查询成功", messages);
         } catch (Exception e) {
             result = new Result(false, "查询失败：系统异常" + e.getMessage());
+        }
+        return result;
+    }
+
+
+    /**
+     * 查询指定用户是否存在未阅读的消息
+     *
+     * @Parame userId  用户id
+     */
+    @RequestMapping("/findUnreadMessage")
+    @ResponseBody
+    public Result findUnreadMessage(Long userId) {
+        Result result = null;
+        try {
+            boolean isHave = messageService.findUnreadMessage(userId);
+            if (isHave) {
+                result = new Result(true, "查询成功,该用户存在未阅读消息");
+            } else {
+                result = new Result(false, "查询成功,该用户不存在未阅读消息");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result(false, "查询失败:系统异常" + e.getMessage());
         }
         return result;
     }

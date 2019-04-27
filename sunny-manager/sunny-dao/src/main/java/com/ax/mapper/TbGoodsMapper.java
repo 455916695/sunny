@@ -28,4 +28,9 @@ public interface TbGoodsMapper {
     int updateByPrimaryKeySelective(TbGoods record);
 
     int updateByPrimaryKey(TbGoods record);
+
+    /**
+     * 更新商状态
+     * */
+    void updateStatus(@Param("ids") Long[] ids,@Param("status") int status);
 }

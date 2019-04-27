@@ -198,9 +198,13 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public void delete(Long[] ids) {
-        for (Long id : ids) {
-            goodsMapper.deleteByPrimaryKey(id);
-        }
+
+        //进行逻辑删除  3 表示删除
+        goodsMapper.updateStatus(ids, 3);
+//
+//        for (Long id : ids) {
+//            goodsMapper.deleteByPrimaryKey(id);
+//        }
     }
 
 
@@ -325,6 +329,31 @@ public class GoodsServiceImpl implements GoodsService {
         Page<TbGoods> page = (Page<TbGoods>) goodsMapper.selectByExample(tge); //查询分页数据
 
         return new PageResult(page.getTotal(), page.getResult());  //返回分页结果
+    }
+
+    /**
+     * 根据商品id 修改状态
+     */
+    @Override
+    public void updateStatusById(Long goodsId, int status) {
+
+        TbGoods tbGoods = new TbGoods();
+        tbGoods.setId(goodsId);
+        tbGoods.setStatus(status);
+        goodsMapper.updateByPrimaryKeySelective(tbGoods);
+
+    }
+
+    @Override
+    public boolean findGoodsIsCanBuy(Long goodsId) {
+
+        TbGoods tbGoods = goodsMapper.selectByPrimaryKey(goodsId);
+
+        //  1 表示正常  2 表示被买走了  3 表示被删除了
+        if (tbGoods.getStatus() == 1) {
+            return true;
+        }
+        return false;
     }
 
 }

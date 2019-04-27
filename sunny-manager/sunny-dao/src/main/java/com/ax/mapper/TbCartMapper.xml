@@ -91,6 +91,12 @@
     from tb_cart
     where id = #{id,jdbcType=BIGINT}
   </select>
+
+  <!-- 查询  selectCountByGoodsId -->
+  <select id="selectCountByGoodsId" resultType="java.lang.Integer">
+     select count(goods_id) from tb_cart where goods_id = #{goodsId}  and buyer_id = #{buyerId} and status = #{cartStatus} LIMIT 1
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from tb_cart
     where id = #{id,jdbcType=BIGINT}
@@ -240,4 +246,23 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!-- 更新状态 -->
+  <update id="updateStatus" >
+    update tb_cart
+    set status = #{status}
+    where id in
+    <foreach collection="ids" open="(" separator="," close=")" item="id">
+      #{id}
+    </foreach>
+  </update>
+
+  <!--updateStatusByBuyerIdAndGoodsId-->
+  <update id="updateStatusByBuyerIdAndGoodsId" >
+    update tb_cart
+    set status = #{status}
+    where buyer_id = #{buyerId}
+    and goods_id = #{goodsId}
+  </update>
+
 </mapper>

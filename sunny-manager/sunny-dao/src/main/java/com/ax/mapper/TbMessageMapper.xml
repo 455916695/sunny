@@ -95,11 +95,12 @@
         where id = #{id,jdbcType=BIGINT}
     </select>
 
-    <!-- 查询 指定用户接受的最新数据  -->
+    <!-- 查询 指定用户接受的最新数据 1 表示未阅读 2 表示已阅读  -->
     <select id="findNewMessage" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from tb_message where create_time in (SELECT max(create_time) from tb_message where re_id=#{reId} GROUP BY
+        from tb_message where create_time in (SELECT max(create_time) from tb_message where re_id=#{reId} and status in
+        (1,2) GROUP BY
         send_id,goods_id )
     </select>
 

@@ -28,4 +28,19 @@ public interface TbCartMapper {
     int updateByPrimaryKeySelective(TbCart record);
 
     int updateByPrimaryKey(TbCart record);
+
+    /**
+     *  查询
+     * */
+    int selectCountByGoodsId(@Param("buyerId") Long buyerId, @Param("goodsId") Long goodsId,@Param("cartStatus") int cartStatus);
+
+/**
+ * 用于逻辑删除
+ * */
+    void updateStatus(@Param("ids") Long[] ids, @Param("status") int status);
+
+    /**
+     *根据买家id 和 商品id 更改购物车状态
+     * */
+    void updateStatusByBuyerIdAndGoodsId(@Param("buyerId") Long buyerId,@Param("goodsId") Long goodsId,@Param("status")int status);
 }

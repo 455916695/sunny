@@ -56,13 +56,21 @@ public class CartController {
     @RequestMapping("/add")
     @ResponseBody
     public Result add(TbCart cart) {
+        Result result = null;
         try {
-            cartService.add(cart);
-            return new Result(true, "增加成功");
+            // 传入参数 查询 指定商品是否已经存在与购物车中
+            boolean exist = cartService.findCountByGoodsId(cart.getBuyerId(),cart.getGoodsId());
+            if (!exist) {
+                cartService.add(cart);
+                result = new Result(true, "增加成功");
+            } else {
+                result = new Result(false, "购物车添加失败，已存在");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false, "增加失败");
+            result = new Result(false, "增加失败" + e.getMessage());
         }
+        return result;
     }
 
     /**
@@ -135,7 +143,8 @@ public class CartController {
         try {
             result = cartService.findPage(cart, pageNum, pageSize);
         } catch (Exception e) {
-            result = new Result(false, "查询失败:异常");
+            e.printStackTrace();
+            result = new Result(false, "查询失败:异常" + e.getMessage());
         }
         return result;
     }

@@ -106,11 +106,12 @@
     </select>
 
     <!-- 自己写的 -->
-    <select id="selectOneByKindId" resultMap="DataResultMap" parameterType="java.lang.Long">
+    <select id="selectOneByKindId" resultMap="DataResultMap">
         select
         <include refid="Data_Column_List"/>
         from tb_image
-        where kind_id = #{kindId,jdbcType=BIGINT}
+        where kind_id = #{kindId}
+        and kind = #{kind}
         Limit 1
     </select>
 

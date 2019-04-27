@@ -308,4 +308,14 @@
       status = #{status,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+    <!-- 对订单进行逻辑删除 -->
+    <update id="updateStatus" >
+        update tb_order
+        set status = #{status}
+        where id in
+        <foreach collection="ids" open="(" separator="," close=")" item="id">
+            #{id}
+        </foreach>
+    </update>
 </mapper>

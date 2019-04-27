@@ -12,6 +12,7 @@ import com.ax.mapper.TbGoodsMapper;
 import com.ax.mapper.TbImageMapper;
 import com.ax.pojo.*;
 import com.ax.service.CartService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.pagehelper.Page;
@@ -65,9 +66,11 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public void add(TbCart cart) {
-
+//        private Long buyerId;
+//        private Long goodsId;
         // 修改cart的一些数据
         if (cart != null) {
+
             if (cart.getNumber() == null) {
                 cart.setNumber(DEFAULT_GOODS_NUMBER);
             }
@@ -107,11 +110,11 @@ public class CartServiceImpl implements CartService {
         if (tbCart.getGoodsId() != null) {
             TbGoods tbGoods = goodsMapper.selectByPrimaryKey(tbCart.getGoodsId());
             list.add(tbGoods);
-            if (tbGoods.getContentId() != null) {
+            if (tbGoods != null && tbGoods.getContentId() != null) {
                 TbContent tbContent = contentMapper.selectByPrimaryKey(tbGoods.getContentId());
                 list.add(tbContent);
             }
-            TbImage tbImage = imageMapper.selectOneByKindId(tbGoods.getId());
+            TbImage tbImage = imageMapper.selectOneByKindId(tbGoods.getId(), 2);
             list.add(tbImage);
         }
 
@@ -123,9 +126,11 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public void delete(Long[] ids) {
-        for (Long id : ids) {
-            cartMapper.deleteByPrimaryKey(id);
-        }
+
+        cartMapper.updateStatus(ids,3);
+//        for (Long id : ids) {
+//            cartMapper.deleteByPrimaryKey(id);
+//        }
     }
 
 
@@ -137,9 +142,15 @@ public class CartServiceImpl implements CartService {
         TbCartExample.Criteria criteria = example.createCriteria();
 
         if (cart != null) {
+            //买家id
             if (cart.getBuyerId() != null) {
-                criteria.andBuyerIdEqualTo(cart.getBuyerId());   //买家id
+                criteria.andBuyerIdEqualTo(cart.getBuyerId());
             }
+            //如果状态存在，添加状态条件
+            if (cart.getStatus() != null) {
+                criteria.andStatusEqualTo(cart.getStatus());
+            }
+
         }
 
         Page<TbCart> page = (Page<TbCart>) cartMapper.selectByExample(example);
@@ -149,9 +160,27 @@ public class CartServiceImpl implements CartService {
             if (tbCart.getId() != null) {
                 list.add(findOne(tbCart.getId()));
             }
-
         }
         return new Result(true, "查询成功", list);
     }
+
+    /**
+     * 根据指定买家购物车是否存在指定商品
+     */
+    @Override
+    public boolean findCountByGoodsId(Long buyerId, Long goodsId) {
+
+        //cartStatus 购物车状态
+        int cartStatus = 1;
+        int num = cartMapper.selectCountByGoodsId(buyerId, goodsId,cartStatus);
+
+        if (num > 0){
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
 
 }

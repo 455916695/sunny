@@ -33,4 +33,14 @@ public interface MessageService {
      */
     public List<TbMessage> findNewMessage(Long reId);
 
+    /**
+     * 修改消息为  已阅读状态
+     */
+    void updateMessageStatusForReaded(List<TbMessage> message, Long id);
+
+    /**
+     * 查询 指定用户未阅读的消息
+     *
+     */
+    boolean findUnreadMessage(Long userId);
 }

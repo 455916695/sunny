@@ -128,19 +128,19 @@ public class CommentServiceImpl implements CommentService {
                 TbContent tbContent = contentMapper.selectByPrimaryKey(tbGoods.getContentId());
                 list.add(tbContent);   //添加描述
             }
-            TbImage image = imageMapper.selectOneByKindId(tbGoods.getId()); //TODO 此处还没有写
+            TbImage image = imageMapper.selectOneByKindId(tbGoods.getId(),2); //TODO 此处还没有写
             list.add(image);
         }
         if (tbComment != null && tbComment.getSellerId() != null) {
             TbUser tbUser = userMapper.selectByPrimaryKey(tbComment.getSellerId());
             list.add(tbUser);
-            TbImage image = imageMapper.selectOneByKindId(tbUser.getId());
+            TbImage image = imageMapper.selectOneByKindId(tbUser.getId(),1);
             list.add(image);
         }
         if (tbComment != null && tbComment.getBuyerId() != null) {
             TbUser tbUser = userMapper.selectByPrimaryKey(tbComment.getBuyerId());
             list.add(tbUser);
-            TbImage image = imageMapper.selectOneByKindId(tbUser.getId());
+            TbImage image = imageMapper.selectOneByKindId(tbUser.getId(),1);
             list.add(image);
         }
         if (tbComment != null && tbComment.getContentId() != null) {

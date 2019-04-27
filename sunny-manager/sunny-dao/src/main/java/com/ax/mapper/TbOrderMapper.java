@@ -29,5 +29,8 @@ public interface TbOrderMapper {
 
     int updateByPrimaryKey(TbOrder record);
 
-
+    /**
+     * 对订单进行逻辑删除
+     * */
+    void updateStatus(@Param("ids") Long[] ids, @Param("status") Byte status);
 }

@@ -7,6 +7,7 @@ import com.ax.entity.PageResult;
 import com.ax.entity.Result;
 import com.ax.pojo.TbComment;
 import com.ax.service.CommentService;
+import com.ax.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,13 @@ public class CommentController {
 
     @Autowired
     private CommentService commentService;
+
+
+    /**
+     * 订单
+     */
+    @Autowired
+    private OrderService orderService;
 
     /**
      * 返回全部列表
@@ -57,13 +65,18 @@ public class CommentController {
     @RequestMapping("/add")
     @ResponseBody
     public Result add(Comment comment) {
+        Result result = null;
         try {
             commentService.add(comment);
-            return new Result(true, "增加成功");
+
+            //修改订单的状态
+            orderService.updateStatusByBuyerIdAndGoodsId(comment.getBuyerId(), comment.getGoodsId(), (byte) 5);
+            result = new Result(true, "增加成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false, "增加失败");
+            result = new Result(false, "增加失败");
         }
+        return result;
     }
 
     /**

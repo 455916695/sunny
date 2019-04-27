@@ -85,7 +85,12 @@ public interface OrderService {
     public PageResult  newSearch(TbOrder order, int pageNum, int pageSize);
 
     /**
-     *  根据买家id 查询订单
+     *  根据买家id 查询订单  注意：该方法查询的是处于  未评论 评论状态
      * */
-    List<TbOrder> findOrderByBuyerId(Long buyerId);
+    List<TbOrder> findOrderByBuyerId(TbOrder order);
+
+    /**
+     * 根据买家id 商品id  修改订单状态
+     * */
+    void updateStatusByBuyerIdAndGoodsId(Long buyerId, Long goodsId, byte status);
 }

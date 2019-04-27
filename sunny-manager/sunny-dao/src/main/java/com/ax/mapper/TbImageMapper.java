@@ -32,6 +32,6 @@ public interface TbImageMapper {
     /**
      * 根据 kindId 查询一张图片
      */
-    TbImage selectOneByKindId(Long kindId);
+    TbImage selectOneByKindId(@Param("kindId") Long kindId, @Param("kind") Integer kind);
 
 }

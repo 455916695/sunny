@@ -197,6 +197,16 @@ public class ImageServiceImpl implements ImageService {
             address = images[images.length - 1];
         }
 
+        if (kind == 1) {  //如果用户头像  ，先删除他的所有头像
+            TbImageExample tie = new TbImageExample();
+            TbImageExample.Criteria criteria = tie.createCriteria();
+
+            criteria.andKindIdEqualTo(id);
+            criteria.andKindEqualTo(1);
+            imageMapper.deleteByExample(tie);
+        }
+
+
         //添加商品图片
         TbImage tbImage = new TbImage();
         tbImage.setAddress(address);
@@ -214,9 +224,21 @@ public class ImageServiceImpl implements ImageService {
      */
     public TbImage findImageAddress(TbImage image) {
 
-        TbImage tbImage = imageMapper.selectOneByKindId(image.getKindId());
 
-        return tbImage;
+        TbImageExample tie = new TbImageExample();
+        TbImageExample.Criteria criteria = tie.createCriteria();
+
+        if (image != null && image.getKind() != null)
+            criteria.andKindEqualTo(image.getKind());
+        if (image != null && image.getKindId() != null)
+            criteria.andKindIdEqualTo(image.getKindId());
+
+        List<TbImage> images = imageMapper.selectByExample(tie);
+
+        if (images != null && images.size() > 0)
+            return images.get(0);
+
+        return null;
     }
 
 

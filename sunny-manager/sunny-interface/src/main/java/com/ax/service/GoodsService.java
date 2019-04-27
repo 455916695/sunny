@@ -98,5 +98,13 @@ public interface GoodsService {
      */
     PageResult search(TbGoods tbGoods, int pageNum, int pageSize);
 
+    /**
+     * 根据id修改状态
+     */
+    void updateStatusById(Long goodsId, int status);
 
+    /**
+     * 查询商品是否存于可以被购买的状态
+     */
+    boolean findGoodsIsCanBuy(Long goodsId);
 }
